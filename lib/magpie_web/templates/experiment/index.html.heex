@@ -1,0 +1,34 @@
+<h1>Listing Experiments</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Author</th>
+      <th>Description</th>
+      <th>Active</th>
+      <th>Expansion strategy</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for experiment <- @experiments do %>
+    <tr>
+      <td><%= experiment.name %></td>
+      <td><%= experiment.author %></td>
+      <td><%= experiment.description %></td>
+      <td><%= experiment.active %></td>
+      <td><%= experiment.expansion_strategy %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.experiment_path(@conn, :show, experiment) %></span>
+        <span><%= link "Edit", to: Routes.experiment_path(@conn, :edit, experiment) %></span>
+        <span><%= link "Delete", to: Routes.experiment_path(@conn, :delete, experiment), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Experiment", to: Routes.experiment_path(@conn, :new) %></span>

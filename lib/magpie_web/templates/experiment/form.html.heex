@@ -1,0 +1,51 @@
+<.form let={f} for={@changeset} action={@action}>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <%= label f, :name %>
+  <%= text_input f, :name %>
+  <%= error_tag f, :name %>
+
+  <%= label f, :author %>
+  <%= text_input f, :author %>
+  <%= error_tag f, :author %>
+
+  <%= label f, :description %>
+  <%= text_input f, :description %>
+  <%= error_tag f, :description %>
+
+  <%= label f, :active %>
+  <%= checkbox f, :active %>
+  <%= error_tag f, :active %>
+
+  <%= label f, :dynamic_retrieval_keys %>
+  <%= multiple_select f, :dynamic_retrieval_keys, ["Option 1": "option1", "Option 2": "option2"] %>
+  <%= error_tag f, :dynamic_retrieval_keys %>
+
+  <%= label f, :is_ulc %>
+  <%= checkbox f, :is_ulc %>
+  <%= error_tag f, :is_ulc %>
+
+  <%= label f, :ulc_num_variants %>
+  <%= number_input f, :ulc_num_variants %>
+  <%= error_tag f, :ulc_num_variants %>
+
+  <%= label f, :ulc_num_chains %>
+  <%= number_input f, :ulc_num_chains %>
+  <%= error_tag f, :ulc_num_chains %>
+
+  <%= label f, :ulc_num_generations %>
+  <%= number_input f, :ulc_num_generations %>
+  <%= error_tag f, :ulc_num_generations %>
+
+  <%= label f, :expansion_strategy %>
+  <%= select f, :expansion_strategy, Ecto.Enum.values(Magpie.Experiments.Experiment, :expansion_strategy), prompt: "Choose a value" %>
+  <%= error_tag f, :expansion_strategy %>
+
+  <div>
+    <%= submit "Save" %>
+  </div>
+</.form>

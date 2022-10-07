@@ -1,0 +1,74 @@
+<h1>Show Experiment</h1>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @experiment.name %>
+  </li>
+
+  <li>
+    <strong>Author:</strong>
+    <%= @experiment.author %>
+  </li>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @experiment.description %>
+  </li>
+
+  <li>
+    <strong>Active:</strong>
+    <%= @experiment.active %>
+  </li>
+
+  <li>
+    <strong>Dynamic retrieval keys:</strong>
+    <%= @experiment.dynamic_retrieval_keys %>
+  </li>
+
+  <li>
+    <strong>Is ulc:</strong>
+    <%= @experiment.is_ulc %>
+  </li>
+
+  <li>
+    <strong>Ulc num variants:</strong>
+    <%= @experiment.ulc_num_variants %>
+  </li>
+
+  <li>
+    <strong>Ulc num chains:</strong>
+    <%= @experiment.ulc_num_chains %>
+  </li>
+
+  <li>
+    <strong>Ulc num generations:</strong>
+    <%= @experiment.ulc_num_generations %>
+  </li>
+
+  <li>
+    <strong>Ulc num players:</strong>
+    <%= @experiment.ulc_num_players %>
+  </li>
+
+  <li>
+    <strong>Copy number:</strong>
+    <%= @experiment.copy_count %>
+  </li>
+
+<%!-- We'll likely want to show it, but in a different way. --%>
+  <%!-- <li>
+    <strong>Slot ordering:</strong>
+    <%= @experiment.slot_ordering %>
+  </li> --%>
+
+  <li>
+    <strong>Expansion strategy:</strong>
+    <%= @experiment.expansion_strategy %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.experiment_path(@conn, :edit, @experiment) %></span> |
+<span><%= link "Back", to: Routes.experiment_path(@conn, :index) %></span>
