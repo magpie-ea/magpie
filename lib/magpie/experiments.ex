@@ -42,16 +42,16 @@ defmodule Magpie.Experiments do
 
   ## Examples
 
-      iex> create_experiment(%{field: value})
+      iex> create_ulc_experiment(%{field: value})
       {:ok, %Experiment{}}
 
-      iex> create_experiment(%{field: bad_value})
+      iex> create_ulc_experiment(%{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_experiment(attrs \\ %{}) do
+  def create_ulc_experiment(attrs \\ %{}) do
     %Experiment{}
-    |> Experiment.changeset(attrs)
+    |> Experiment.create_changeset_ulc(attrs)
     |> Repo.insert()
   end
 
@@ -69,7 +69,7 @@ defmodule Magpie.Experiments do
   """
   def update_experiment(%Experiment{} = experiment, attrs) do
     experiment
-    |> Experiment.changeset(attrs)
+    |> Experiment.update_changeset(attrs)
     |> Repo.update()
   end
 
@@ -99,6 +99,6 @@ defmodule Magpie.Experiments do
 
   """
   def change_experiment(%Experiment{} = experiment, attrs \\ %{}) do
-    Experiment.changeset(experiment, attrs)
+    Experiment.update_changeset(experiment, attrs)
   end
 end

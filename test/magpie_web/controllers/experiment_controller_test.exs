@@ -96,7 +96,7 @@ defmodule MagpieWeb.ExperimentControllerTest do
   end
 
   describe "edit experiment" do
-    setup [:create_experiment]
+    setup [:create_ulc_experiment]
 
     test "renders form for editing chosen experiment", %{conn: conn, experiment: experiment} do
       conn = get(conn, Routes.experiment_path(conn, :edit, experiment))
@@ -105,7 +105,7 @@ defmodule MagpieWeb.ExperimentControllerTest do
   end
 
   describe "update experiment" do
-    setup [:create_experiment]
+    setup [:create_ulc_experiment]
 
     test "redirects when data is valid", %{conn: conn, experiment: experiment} do
       conn =
@@ -126,7 +126,7 @@ defmodule MagpieWeb.ExperimentControllerTest do
   end
 
   describe "delete experiment" do
-    setup [:create_experiment]
+    setup [:create_ulc_experiment]
 
     test "deletes chosen experiment", %{conn: conn, experiment: experiment} do
       conn = delete(conn, Routes.experiment_path(conn, :delete, experiment))
@@ -138,7 +138,7 @@ defmodule MagpieWeb.ExperimentControllerTest do
     end
   end
 
-  defp create_experiment(_) do
+  defp create_ulc_experiment(_) do
     experiment = experiment_fixture()
     %{experiment: experiment}
   end

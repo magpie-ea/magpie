@@ -30,7 +30,7 @@ defmodule Magpie.ExperimentsFixtures do
         ulc_num_players: 42,
         ulc_num_variants: 42
       })
-      |> Magpie.Experiments.create_experiment()
+      |> Magpie.Experiments.create_ulc_experiment()
 
     experiment
   end

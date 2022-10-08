@@ -1,6 +1,9 @@
 defmodule Magpie.Experiments.Experiment do
+  @moduledoc false
   use Ecto.Schema
   import Ecto.Changeset
+
+  alias Magpie.Experiments.Slots
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
@@ -28,7 +31,33 @@ defmodule Magpie.Experiments.Experiment do
   end
 
   @doc false
-  def changeset(experiment, attrs) do
+  def create_changeset_ulc(experiment, attrs) do
+    experiment
+    |> cast(attrs, [
+      :name,
+      :author,
+      :description,
+      :active,
+      :dynamic_retrieval_keys,
+      :is_ulc,
+      :ulc_num_variants,
+      :ulc_num_chains,
+      :ulc_num_generations,
+      :ulc_num_players,
+      :expansion_strategy
+    ])
+    |> validate_required([
+      :name,
+      :author,
+      :active,
+      :is_ulc,
+      :expansion_strategy
+    ])
+    |> validate_ulc_experiment_requirements()
+    |> initialize_slot_fields()
+  end
+
+  def update_changeset(experiment, attrs \\ %{}) do
     experiment
     |> cast(attrs, [
       :name,
@@ -37,33 +66,72 @@ defmodule Magpie.Experiments.Experiment do
       :active,
       :dynamic_retrieval_keys,
       :experiment_result_columns,
-      :is_ulc,
-      :ulc_num_variants,
-      :ulc_num_chains,
-      :ulc_num_generations,
-      :ulc_num_players,
-      :copy_count,
       :slot_ordering,
       :slot_statuses,
       :slot_dependencies,
       :slot_attempt_counts,
       :slot_trial_num_players,
+      :copy_count,
       :expansion_strategy
     ])
     |> validate_required([
       :name,
       :author,
       :active,
-      :dynamic_retrieval_keys,
-      :experiment_result_columns,
       :is_ulc,
-      :copy_count,
-      :slot_ordering,
-      :slot_statuses,
-      :slot_dependencies,
-      :slot_attempt_counts,
-      :slot_trial_num_players,
       :expansion_strategy
     ])
+  end
+
+  defp validate_ulc_experiment_requirements(changeset) do
+    changeset
+    |> validate_required([
+      :ulc_num_variants,
+      :ulc_num_chains,
+      :ulc_num_generations,
+      :ulc_num_players
+    ])
+    |> validate_number(:ulc_num_variants, greater_than: 0)
+    |> validate_number(:ulc_num_chains, greater_than: 0)
+    |> validate_number(:ulc_num_generations, greater_than: 0)
+    |> validate_number(:ulc_num_players, greater_than: 0)
+  end
+
+  # During the initialization, we first create the correct specifications, then perform the `free` operation on the slots.
+  defp initialize_slot_fields(changeset) do
+    %{
+      slot_ordering: updated_slot_ordering,
+      slot_statuses: updated_slot_statuses,
+      slot_dependencies: updated_slot_dependencies,
+      slot_attempt_counts: updated_slot_attempt_counts,
+      slot_trial_num_players: updated_trial_players,
+      copy_count: updated_copy_count
+    } =
+      Slots.produce_updated_slots_from_ulc_specification(%{
+        ulc_num_variants: get_field(changeset, :ulc_num_variants),
+        ulc_num_chains: get_field(changeset, :ulc_num_chains),
+        ulc_num_generations: get_field(changeset, :ulc_num_generations),
+        ulc_num_players: get_field(changeset, :ulc_num_players),
+        slot_ordering: [],
+        slot_statuses: %{},
+        slot_dependencies: %{},
+        slot_attempt_counts: %{},
+        slot_trial_num_players: %{},
+        copy_count: 0
+      })
+
+    freed_slot_statuses =
+      Slots.produce_updated_slot_statuses_via_free_slots(%{
+        slot_statuses: updated_slot_statuses,
+        slot_dependencies: updated_slot_dependencies
+      })
+
+    changeset
+    |> put_change(:slot_ordering, updated_slot_ordering)
+    |> put_change(:slot_statuses, freed_slot_statuses)
+    |> put_change(:slot_dependencies, updated_slot_dependencies)
+    |> put_change(:slot_attempt_counts, updated_slot_attempt_counts)
+    |> put_change(:slot_trial_num_players, updated_trial_players)
+    |> put_change(:copy_count, updated_copy_count)
   end
 end

@@ -15,7 +15,7 @@ defmodule MagpieWeb.ExperimentController do
   end
 
   def create(conn, %{"experiment" => experiment_params}) do
-    case Experiments.create_experiment(experiment_params) do
+    case Experiments.create_ulc_experiment(experiment_params) do
       {:ok, experiment} ->
         conn
         |> put_flash(:info, "Experiment created successfully.")
