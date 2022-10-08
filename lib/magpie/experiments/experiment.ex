@@ -8,14 +8,14 @@ defmodule Magpie.Experiments.Experiment do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "experiments" do
-    field :active, :boolean, default: false
+    field :active, :boolean, default: true
     field :author, :string
     field :copy_count, :integer
     field :description, :string
     field :dynamic_retrieval_keys, {:array, :string}
     field :expansion_strategy, Ecto.Enum, values: [:expansive, :patient, :no_expansion]
     field :experiment_result_columns, {:array, :string}
-    field :is_ulc, :boolean, default: false
+    field :is_ulc, :boolean, default: true
     field :name, :string
     field :slot_attempt_counts, :map
     field :slot_dependencies, :map

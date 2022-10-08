@@ -5,11 +5,11 @@
     </div>
   <% end %>
 
-  <%= label f, :name %>
+  <%= label f, :name, "Experiment name" %>
   <%= text_input f, :name %>
   <%= error_tag f, :name %>
 
-  <%= label f, :author %>
+  <%= label f, :author, "Experiment author" %>
   <%= text_input f, :author %>
   <%= error_tag f, :author %>
 
@@ -20,29 +20,34 @@
   <%= label f, :active %>
   <%= checkbox f, :active %>
   <%= error_tag f, :active %>
-
+<%!--
   <%= label f, :dynamic_retrieval_keys %>
   <%= multiple_select f, :dynamic_retrieval_keys, ["Option 1": "option1", "Option 2": "option2"] %>
-  <%= error_tag f, :dynamic_retrieval_keys %>
+  <%= error_tag f, :dynamic_retrieval_keys %> --%>
 
-  <%= label f, :is_ulc %>
+  <%= label f, :is_ulc, "Is this an ULC experiment?" %>
+  <div>Note: At this stage only ULC experiments are supported. Please keep the checkbox checked.</div>
   <%= checkbox f, :is_ulc %>
   <%= error_tag f, :is_ulc %>
 
-  <%= label f, :ulc_num_variants %>
-  <%= number_input f, :ulc_num_variants %>
+  <%= label f, :ulc_num_variants, "Number of variants for an ULC experiment" %>
+  <%= number_input f, :ulc_num_variants, placeholder: "e.g. 1" %>
   <%= error_tag f, :ulc_num_variants %>
 
-  <%= label f, :ulc_num_chains %>
-  <%= number_input f, :ulc_num_chains %>
+  <%= label f, :ulc_num_chains, "Number of chains for an ULC experiment"  %>
+  <%= number_input f, :ulc_num_chains, placeholder: "e.g. 1" %>
   <%= error_tag f, :ulc_num_chains %>
 
-  <%= label f, :ulc_num_generations %>
-  <%= number_input f, :ulc_num_generations %>
+  <%= label f, :ulc_num_generations, "Number of generations for an ULC experiment"   %>
+  <%= number_input f, :ulc_num_generations, placeholder: "e.g. 1" %>
   <%= error_tag f, :ulc_num_generations %>
 
+  <%= label f, :ulc_num_players, "Number of players for an ULC experiment"  %>
+  <%= number_input f, :ulc_num_players,  placeholder: "e.g. 1" %>
+  <%= error_tag f, :ulc_num_players %>
+
   <%= label f, :expansion_strategy %>
-  <%= select f, :expansion_strategy, Ecto.Enum.values(Magpie.Experiments.Experiment, :expansion_strategy), prompt: "Choose a value" %>
+  <%= select f, :expansion_strategy, Ecto.Enum.values(Magpie.Experiments.Experiment, :expansion_strategy), selected: "expansive" %>
   <%= error_tag f, :expansion_strategy %>
 
   <div>

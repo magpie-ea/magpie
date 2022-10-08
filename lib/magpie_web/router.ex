@@ -17,7 +17,7 @@ defmodule MagpieWeb.Router do
   scope "/", MagpieWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    get "/", ExperimentController, :index
     resources "/experiments", ExperimentController
   end
 
