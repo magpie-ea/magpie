@@ -18,7 +18,7 @@ defmodule MagpieWeb.Router do
     pipe_through :browser
 
     get "/", ExperimentController, :index
-    resources "/experiments", ExperimentController
+    resources "/experiments", ExperimentController, except: [:edit, :update]
   end
 
   # Other scopes may use custom stacks.

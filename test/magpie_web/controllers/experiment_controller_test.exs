@@ -4,64 +4,28 @@ defmodule MagpieWeb.ExperimentControllerTest do
   import Magpie.ExperimentsFixtures
 
   @create_attrs %{
-    active: true,
     author: "some author",
-    copy_count: 42,
-    description: "some description",
-    dynamic_retrieval_keys: [],
-    expansion_strategy: :expansive,
-    experiment_result_columns: [],
-    is_ulc: true,
     name: "some name",
-    slot_attempt_counts: %{},
-    slot_dependencies: %{},
-    slot_ordering: [],
-    slot_statuses: %{},
-    slot_trial_num_players: %{},
-    ulc_num_chains: 42,
-    ulc_num_generations: 42,
-    ulc_num_players: 42,
-    ulc_num_variants: 42
-  }
-  @update_attrs %{
-    active: false,
-    author: "some updated author",
-    copy_count: 43,
-    description: "some updated description",
-    dynamic_retrieval_keys: [],
-    expansion_strategy: :patient,
-    experiment_result_columns: [],
-    is_ulc: false,
-    name: "some updated name",
-    slot_attempt_counts: %{},
-    slot_dependencies: %{},
-    slot_ordering: [],
-    slot_statuses: %{},
-    slot_trial_num_players: %{},
-    ulc_num_chains: 43,
-    ulc_num_generations: 43,
-    ulc_num_players: 43,
-    ulc_num_variants: 43
+    description: "some description",
+    active: true,
+    is_ulc: true,
+    ulc_num_chains: 2,
+    ulc_num_generations: 2,
+    ulc_num_players: 2,
+    ulc_num_variants: 2,
+    expansion_strategy: :expansive
   }
   @invalid_attrs %{
-    active: nil,
-    author: nil,
-    copy_count: nil,
-    description: nil,
-    dynamic_retrieval_keys: nil,
-    expansion_strategy: nil,
-    experiment_result_columns: nil,
-    is_ulc: nil,
-    name: nil,
-    slot_attempt_counts: nil,
-    slot_dependencies: nil,
-    slot_ordering: nil,
-    slot_statuses: nil,
-    slot_trial_num_players: nil,
-    ulc_num_chains: nil,
-    ulc_num_generations: nil,
-    ulc_num_players: nil,
-    ulc_num_variants: nil
+    author: "some author",
+    name: "some name",
+    description: "some description",
+    active: true,
+    is_ulc: true,
+    ulc_num_chains: -1,
+    ulc_num_generations: 0,
+    ulc_num_players: -100,
+    ulc_num_variants: -50,
+    expansion_strategy: :expansive
   }
 
   describe "index" do
@@ -95,35 +59,35 @@ defmodule MagpieWeb.ExperimentControllerTest do
     end
   end
 
-  describe "edit experiment" do
-    setup [:create_ulc_experiment]
+  # describe "edit experiment" do
+  #   setup [:create_ulc_experiment]
 
-    test "renders form for editing chosen experiment", %{conn: conn, experiment: experiment} do
-      conn = get(conn, Routes.experiment_path(conn, :edit, experiment))
-      assert html_response(conn, 200) =~ "Edit Experiment"
-    end
-  end
+  #   test "renders form for editing chosen experiment", %{conn: conn, experiment: experiment} do
+  #     conn = get(conn, Routes.experiment_path(conn, :edit, experiment))
+  #     assert html_response(conn, 200) =~ "Edit Experiment"
+  #   end
+  # end
 
-  describe "update experiment" do
-    setup [:create_ulc_experiment]
+  # describe "update experiment" do
+  #   setup [:create_ulc_experiment]
 
-    test "redirects when data is valid", %{conn: conn, experiment: experiment} do
-      conn =
-        put(conn, Routes.experiment_path(conn, :update, experiment), experiment: @update_attrs)
+  #   test "redirects when data is valid", %{conn: conn, experiment: experiment} do
+  #     conn =
+  #       put(conn, Routes.experiment_path(conn, :update, experiment), experiment: @update_attrs)
 
-      assert redirected_to(conn) == Routes.experiment_path(conn, :show, experiment)
+  #     assert redirected_to(conn) == Routes.experiment_path(conn, :show, experiment)
 
-      conn = get(conn, Routes.experiment_path(conn, :show, experiment))
-      assert html_response(conn, 200) =~ "some updated author"
-    end
+  #     conn = get(conn, Routes.experiment_path(conn, :show, experiment))
+  #     assert html_response(conn, 200) =~ "some updated author"
+  #   end
 
-    test "renders errors when data is invalid", %{conn: conn, experiment: experiment} do
-      conn =
-        put(conn, Routes.experiment_path(conn, :update, experiment), experiment: @invalid_attrs)
+  #   test "renders errors when data is invalid", %{conn: conn, experiment: experiment} do
+  #     conn =
+  #       put(conn, Routes.experiment_path(conn, :update, experiment), experiment: @invalid_attrs)
 
-      assert html_response(conn, 200) =~ "Edit Experiment"
-    end
-  end
+  #     assert html_response(conn, 200) =~ "Edit Experiment"
+  #   end
+  # end
 
   describe "delete experiment" do
     setup [:create_ulc_experiment]

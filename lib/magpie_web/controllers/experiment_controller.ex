@@ -10,7 +10,7 @@ defmodule MagpieWeb.ExperimentController do
   end
 
   def new(conn, _params) do
-    changeset = Experiments.change_experiment(%Experiment{})
+    changeset = Experiment.create_changeset_ulc(%Experiment{})
     render(conn, "new.html", changeset: changeset)
   end
 
@@ -31,25 +31,25 @@ defmodule MagpieWeb.ExperimentController do
     render(conn, "show.html", experiment: experiment)
   end
 
-  def edit(conn, %{"id" => id}) do
-    experiment = Experiments.get_experiment!(id)
-    changeset = Experiments.change_experiment(experiment)
-    render(conn, "edit.html", experiment: experiment, changeset: changeset)
-  end
+  # def edit(conn, %{"id" => id}) do
+  #   experiment = Experiments.get_experiment!(id)
+  #   changeset = Experiments.change_experiment(experiment)
+  #   render(conn, "edit.html", experiment: experiment, changeset: changeset)
+  # end
 
-  def update(conn, %{"id" => id, "experiment" => experiment_params}) do
-    experiment = Experiments.get_experiment!(id)
+  # def update(conn, %{"id" => id, "experiment" => experiment_params}) do
+  #   experiment = Experiments.get_experiment!(id)
 
-    case Experiments.update_experiment(experiment, experiment_params) do
-      {:ok, experiment} ->
-        conn
-        |> put_flash(:info, "Experiment updated successfully.")
-        |> redirect(to: Routes.experiment_path(conn, :show, experiment))
+  #   case Experiments.update_experiment(experiment, experiment_params) do
+  #     {:ok, experiment} ->
+  #       conn
+  #       |> put_flash(:info, "Experiment updated successfully.")
+  #       |> redirect(to: Routes.experiment_path(conn, :show, experiment))
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", experiment: experiment, changeset: changeset)
-    end
-  end
+  #     {:error, %Ecto.Changeset{} = changeset} ->
+  #       render(conn, "edit.html", experiment: experiment, changeset: changeset)
+  #   end
+  # end
 
   def delete(conn, %{"id" => id}) do
     experiment = Experiments.get_experiment!(id)

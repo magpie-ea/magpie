@@ -31,7 +31,7 @@ defmodule Magpie.Experiments.Experiment do
   end
 
   @doc false
-  def create_changeset_ulc(experiment, attrs) do
+  def create_changeset_ulc(experiment, attrs \\ %{}) do
     experiment
     |> cast(attrs, [
       :name,
