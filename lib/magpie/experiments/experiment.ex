@@ -57,31 +57,32 @@ defmodule Magpie.Experiments.Experiment do
     |> initialize_slot_fields()
   end
 
-  def update_changeset(experiment, attrs \\ %{}) do
-    experiment
-    |> cast(attrs, [
-      :name,
-      :author,
-      :description,
-      :active,
-      :dynamic_retrieval_keys,
-      :experiment_result_columns,
-      :slot_ordering,
-      :slot_statuses,
-      :slot_dependencies,
-      :slot_attempt_counts,
-      :slot_trial_num_players,
-      :copy_count,
-      :expansion_strategy
-    ])
-    |> validate_required([
-      :name,
-      :author,
-      :active,
-      :is_ulc,
-      :expansion_strategy
-    ])
-  end
+  # Not enabling updates in this version yet.
+  # def update_changeset(experiment, attrs \\ %{}) do
+  #   experiment
+  #   |> cast(attrs, [
+  #     :name,
+  #     :author,
+  #     :description,
+  #     :active,
+  #     :dynamic_retrieval_keys,
+  #     :experiment_result_columns,
+  #     :slot_ordering,
+  #     :slot_statuses,
+  #     :slot_dependencies,
+  #     :slot_attempt_counts,
+  #     :slot_trial_num_players,
+  #     :copy_count,
+  #     :expansion_strategy
+  #   ])
+  #   |> validate_required([
+  #     :name,
+  #     :author,
+  #     :active,
+  #     :is_ulc,
+  #     :expansion_strategy
+  #   ])
+  # end
 
   defp validate_ulc_experiment_requirements(changeset) do
     changeset
@@ -98,7 +99,7 @@ defmodule Magpie.Experiments.Experiment do
   end
 
   # During the initialization, we first create the correct specifications, then perform the `free` operation on the slots.
-  defp initialize_slot_fields(changeset) do
+  defp initialize_slot_fields(%{valid?: true} = changeset) do
     %{
       slot_ordering: updated_slot_ordering,
       slot_statuses: updated_slot_statuses,
@@ -133,5 +134,10 @@ defmodule Magpie.Experiments.Experiment do
     |> put_change(:slot_attempt_counts, updated_slot_attempt_counts)
     |> put_change(:slot_trial_num_players, updated_trial_players)
     |> put_change(:copy_count, updated_copy_count)
+  end
+
+  # In the previous step we should have checked whether the given values are valid or not.
+  defp initialize_slot_fields(%{valid?: false} = changeset) do
+    changeset
   end
 end

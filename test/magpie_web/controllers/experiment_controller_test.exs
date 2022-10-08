@@ -139,7 +139,7 @@ defmodule MagpieWeb.ExperimentControllerTest do
   end
 
   defp create_ulc_experiment(_) do
-    experiment = experiment_fixture()
+    experiment = ulc_experiment_fixture()
     %{experiment: experiment}
   end
 end

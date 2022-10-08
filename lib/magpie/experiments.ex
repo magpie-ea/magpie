@@ -56,24 +56,6 @@ defmodule Magpie.Experiments do
   end
 
   @doc """
-  Updates a experiment.
-
-  ## Examples
-
-      iex> update_experiment(experiment, %{field: new_value})
-      {:ok, %Experiment{}}
-
-      iex> update_experiment(experiment, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_experiment(%Experiment{} = experiment, attrs) do
-    experiment
-    |> Experiment.update_changeset(attrs)
-    |> Repo.update()
-  end
-
-  @doc """
   Deletes a experiment.
 
   ## Examples
@@ -87,18 +69,5 @@ defmodule Magpie.Experiments do
   """
   def delete_experiment(%Experiment{} = experiment) do
     Repo.delete(experiment)
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking experiment changes.
-
-  ## Examples
-
-      iex> change_experiment(experiment)
-      %Ecto.Changeset{data: %Experiment{}}
-
-  """
-  def change_experiment(%Experiment{} = experiment, attrs \\ %{}) do
-    Experiment.update_changeset(experiment, attrs)
   end
 end
