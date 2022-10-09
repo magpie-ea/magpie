@@ -59,4 +59,32 @@ defmodule MagpieWeb.ExperimentController do
     |> put_flash(:info, "Experiment deleted successfully.")
     |> redirect(to: Routes.experiment_path(conn, :index))
   end
+
+  @doc """
+  Check whether the given experiment_id is valid before the participant starts the experiment on the frontend.
+  """
+  def check_valid(conn, %{"id" => id}) do
+    case Experiments.check_experiment_valid(id) do
+      {:error, :experiment_not_found} ->
+        conn
+        |> put_resp_content_type("text/plain")
+        |> send_resp(
+          404,
+          "No experiment with the specified id found. Please check your configuration."
+        )
+
+      {:error, :experiment_inactive} ->
+        conn
+        |> put_resp_content_type("text/plain")
+        |> send_resp(
+          403,
+          "The experiment is not active at the moment and cannot be participated in."
+        )
+
+      :ok ->
+        conn
+        |> put_resp_content_type("text/plain")
+        |> send_resp(200, "The experiment exists and is active")
+    end
+  end
 end

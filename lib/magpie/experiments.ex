@@ -40,6 +40,8 @@ defmodule Magpie.Experiments do
   """
   def get_experiment!(id), do: Repo.get!(Experiment, id)
 
+  def get_experiment(id), do: Repo.get(Experiment, id)
+
   @doc """
   Creates a experiment.
 
@@ -186,5 +188,15 @@ defmodule Magpie.Experiments do
   """
   def change_experiment_submission(%ExperimentSubmission{} = experiment_submission, attrs \\ %{}) do
     ExperimentSubmission.changeset(experiment_submission, attrs)
+  end
+
+  def check_experiment_valid(experiment_id) do
+    with experiment when not is_nil(experiment) <- get_experiment(experiment_id),
+         true <- experiment.active do
+      :ok
+    else
+      nil -> {:error, :experiment_not_found}
+      false -> {:error, :experiment_inactive}
+    end
   end
 end

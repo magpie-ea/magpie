@@ -29,6 +29,7 @@ defmodule MagpieWeb.Router do
   scope "/api", MagpieWeb do
     pipe_through :api
     resources "/experiment_submissions", ExperimentSubmissionController, only: [:create]
+    get("/check_experiment/:id/", ExperimentController, :check_valid)
   end
 
   # Enables LiveDashboard only for development
