@@ -1,0 +1,23 @@
+<h1>Show Experiment result</h1>
+
+<ul>
+
+  <li>
+    <strong>Results:</strong>
+    <%= @experiment_submission.results %>
+  </li>
+
+  <li>
+    <strong>Is intermediate:</strong>
+    <%= @experiment_submission.is_intermediate %>
+  </li>
+
+  <li>
+    <strong>Identifier:</strong>
+    <%= @experiment_submission.identifier %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.experiment_submission_path(@conn, :edit, @experiment_submission) %></span> |
+<span><%= link "Back", to: Routes.experiment_submission_path(@conn, :index) %></span>

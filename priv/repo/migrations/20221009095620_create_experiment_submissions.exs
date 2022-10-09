@@ -1,8 +1,8 @@
-defmodule Magpie.Repo.Migrations.CreateExperimentResults do
+defmodule Magpie.Repo.Migrations.CreateExperimentSubmissions do
   use Ecto.Migration
 
   def change do
-    create table(:experiment_results, primary_key: false) do
+    create table(:experiment_submissions, primary_key: false) do
       add :id, :binary_id, primary_key: true
       add :results, {:array, :map}, null: false
       add :is_intermediate, :boolean, default: false
@@ -12,6 +12,6 @@ defmodule Magpie.Repo.Migrations.CreateExperimentResults do
       timestamps()
     end
 
-    create index(:experiment_results, [:experiment_id])
+    create index(:experiment_submissions, [:experiment_id])
   end
 end

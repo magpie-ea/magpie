@@ -162,30 +162,32 @@ defmodule Magpie.ExperimentsTest do
     end
   end
 
-  describe "experiment_results" do
-    alias Magpie.Experiments.ExperimentResult
+  describe "experiment_submissions" do
+    alias Magpie.Experiments.ExperimentSubmission
 
     import Magpie.ExperimentsFixtures
 
     @invalid_attrs %{identifier: nil, is_intermediate: nil, results: nil, experiment_id: nil}
 
-    test "list_experiment_results/1 returns all experiment_results belonging to a particular experiment" do
+    test "list_experiment_submissions/1 returns all experiment_submissions belonging to a particular experiment" do
       experiment = ulc_experiment_fixture()
-      experiment_result_1 = experiment_result_fixture(experiment_id: experiment.id)
-      experiment_result_2 = experiment_result_fixture(experiment_id: experiment.id)
+      experiment_submission_1 = experiment_submission_fixture(experiment_id: experiment.id)
+      experiment_submission_2 = experiment_submission_fixture(experiment_id: experiment.id)
 
-      assert Experiments.list_experiment_results(experiment.id) == [
-               experiment_result_1,
-               experiment_result_2
+      assert Experiments.list_experiment_submissions(experiment.id) == [
+               experiment_submission_1,
+               experiment_submission_2
              ]
     end
 
-    test "get_experiment_result!/1 returns the experiment_result with given id" do
-      experiment_result = experiment_result_fixture()
-      assert Experiments.get_experiment_result!(experiment_result.id) == experiment_result
+    test "get_experiment_submission!/1 returns the experiment_submission with given id" do
+      experiment_submission = experiment_submission_fixture()
+
+      assert Experiments.get_experiment_submission!(experiment_submission.id) ==
+               experiment_submission
     end
 
-    test "create_experiment_result/1 with valid data creates a experiment_result" do
+    test "create_experiment_submission/1 with valid data creates a experiment_submission" do
       experiment = ulc_experiment_fixture()
 
       valid_attrs = %{
@@ -194,51 +196,55 @@ defmodule Magpie.ExperimentsTest do
         results: []
       }
 
-      assert {:ok, %ExperimentResult{} = experiment_result} =
-               Experiments.create_experiment_result(valid_attrs)
+      assert {:ok, %ExperimentSubmission{} = experiment_submission} =
+               Experiments.create_experiment_submission(valid_attrs)
 
-      assert experiment_result.identifier == "1_1:1:1_1"
-      assert experiment_result.results == []
-      assert experiment_result.experiment_id == experiment.id
+      assert experiment_submission.identifier == "1_1:1:1_1"
+      assert experiment_submission.results == []
+      assert experiment_submission.experiment_id == experiment.id
     end
 
-    test "create_experiment_result/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Experiments.create_experiment_result(@invalid_attrs)
+    test "create_experiment_submission/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} =
+               Experiments.create_experiment_submission(@invalid_attrs)
     end
 
-    test "update_experiment_result/2 with valid data updates the experiment_result" do
-      experiment_result = experiment_result_fixture()
+    test "update_experiment_submission/2 with valid data updates the experiment_submission" do
+      experiment_submission = experiment_submission_fixture()
       update_attrs = %{identifier: "some updated identifier", is_intermediate: false, results: []}
 
-      assert {:ok, %ExperimentResult{} = experiment_result} =
-               Experiments.update_experiment_result(experiment_result, update_attrs)
+      assert {:ok, %ExperimentSubmission{} = experiment_submission} =
+               Experiments.update_experiment_submission(experiment_submission, update_attrs)
 
-      assert experiment_result.identifier == "some updated identifier"
-      assert experiment_result.is_intermediate == false
-      assert experiment_result.results == []
+      assert experiment_submission.identifier == "some updated identifier"
+      assert experiment_submission.is_intermediate == false
+      assert experiment_submission.results == []
     end
 
-    test "update_experiment_result/2 with invalid data returns error changeset" do
-      experiment_result = experiment_result_fixture()
+    test "update_experiment_submission/2 with invalid data returns error changeset" do
+      experiment_submission = experiment_submission_fixture()
 
       assert {:error, %Ecto.Changeset{}} =
-               Experiments.update_experiment_result(experiment_result, @invalid_attrs)
+               Experiments.update_experiment_submission(experiment_submission, @invalid_attrs)
 
-      assert experiment_result == Experiments.get_experiment_result!(experiment_result.id)
+      assert experiment_submission ==
+               Experiments.get_experiment_submission!(experiment_submission.id)
     end
 
-    test "delete_experiment_result/1 deletes the experiment_result" do
-      experiment_result = experiment_result_fixture()
-      assert {:ok, %ExperimentResult{}} = Experiments.delete_experiment_result(experiment_result)
+    test "delete_experiment_submission/1 deletes the experiment_submission" do
+      experiment_submission = experiment_submission_fixture()
+
+      assert {:ok, %ExperimentSubmission{}} =
+               Experiments.delete_experiment_submission(experiment_submission)
 
       assert_raise Ecto.NoResultsError, fn ->
-        Experiments.get_experiment_result!(experiment_result.id)
+        Experiments.get_experiment_submission!(experiment_submission.id)
       end
     end
 
-    test "change_experiment_result/1 returns a experiment_result changeset" do
-      experiment_result = experiment_result_fixture()
-      assert %Ecto.Changeset{} = Experiments.change_experiment_result(experiment_result)
+    test "change_experiment_submission/1 returns a experiment_submission changeset" do
+      experiment_submission = experiment_submission_fixture()
+      assert %Ecto.Changeset{} = Experiments.change_experiment_submission(experiment_submission)
     end
   end
 end

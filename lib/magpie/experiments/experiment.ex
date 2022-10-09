@@ -14,7 +14,7 @@ defmodule Magpie.Experiments.Experiment do
     field :description, :string
     field :dynamic_retrieval_keys, {:array, :string}
     field :expansion_strategy, Ecto.Enum, values: [:expansive, :patient, :no_expansion]
-    field :experiment_result_columns, {:array, :string}
+    field :experiment_submission_columns, {:array, :string}
     field :is_ulc, :boolean, default: true
     field :name, :string
     field :slot_attempt_counts, :map
@@ -65,7 +65,7 @@ defmodule Magpie.Experiments.Experiment do
       :description,
       :active,
       :dynamic_retrieval_keys,
-      :experiment_result_columns,
+      :experiment_submission_columns,
       :slot_ordering,
       :slot_statuses,
       :slot_dependencies,

@@ -28,12 +28,12 @@ defmodule Magpie.ExperimentsFixtures do
   end
 
   @doc """
-  Generate a experiment_result.
+  Generate a experiment_submission.
   """
-  def experiment_result_fixture(attrs \\ %{}) do
+  def experiment_submission_fixture(attrs \\ %{}) do
     experiment = ulc_experiment_fixture()
 
-    {:ok, experiment_result} =
+    {:ok, experiment_submission} =
       attrs
       |> Enum.into(%{
         experiment_id: experiment.id,
@@ -49,8 +49,8 @@ defmodule Magpie.ExperimentsFixtures do
           }
         ]
       })
-      |> Magpie.Experiments.create_experiment_result()
+      |> Magpie.Experiments.create_experiment_submission()
 
-    experiment_result
+    experiment_submission
   end
 end

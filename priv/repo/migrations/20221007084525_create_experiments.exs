@@ -9,7 +9,7 @@ defmodule Magpie.Repo.Migrations.CreateExperiments do
       add :description, :string
       add :active, :boolean, default: true, null: false
       add :dynamic_retrieval_keys, {:array, :string}
-      add :experiment_result_columns, {:array, :string}
+      add :experiment_submission_columns, {:array, :string}
       add :is_ulc, :boolean, default: false, null: false
       add :ulc_num_variants, :integer
       add :ulc_num_chains, :integer

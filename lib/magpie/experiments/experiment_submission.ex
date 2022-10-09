@@ -1,4 +1,4 @@
-defmodule Magpie.Experiments.ExperimentResult do
+defmodule Magpie.Experiments.ExperimentSubmission do
   @doc """
   Stores the experiment results of one slot.
   """
@@ -7,7 +7,7 @@ defmodule Magpie.Experiments.ExperimentResult do
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
-  schema "experiment_results" do
+  schema "experiment_submissions" do
     # Identifies a slot in this experiment.
     # Example: 1_1:1:1_1 for an ULC experiment.
     # {copy_count}_{chain}:{variant}:{generation}_{player}
@@ -20,8 +20,8 @@ defmodule Magpie.Experiments.ExperimentResult do
   end
 
   @doc false
-  def changeset(experiment_result, attrs) do
-    experiment_result
+  def changeset(experiment_submission, attrs) do
+    experiment_submission
     |> cast(attrs, [:results, :is_intermediate, :identifier, :experiment_id])
     |> validate_required([:results, :identifier, :experiment_id])
   end
