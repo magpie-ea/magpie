@@ -79,6 +79,13 @@ defmodule Magpie.Experiments do
   end
 
   @doc """
+  Return all the experiment results belonging to a particular experiment.
+  """
+  def list_experiment_results(experiment_id) do
+    Repo.all(from ep in ExperimentResult, where: ep.experiment_id == ^experiment_id)
+  end
+
+  @doc """
   Gets a single experiment_result.
 
   Raises `Ecto.NoResultsError` if the Experiment result does not exist.

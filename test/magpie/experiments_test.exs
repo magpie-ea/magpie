@@ -169,10 +169,16 @@ defmodule Magpie.ExperimentsTest do
 
     @invalid_attrs %{identifier: nil, is_intermediate: nil, results: nil, experiment_id: nil}
 
-    # test "list_experiment_results/0 returns all experiment_results" do
-    #   experiment_result = experiment_result_fixture()
-    #   assert Experiments.list_experiment_results() == [experiment_result]
-    # end
+    test "list_experiment_results/1 returns all experiment_results belonging to a particular experiment" do
+      experiment = ulc_experiment_fixture()
+      experiment_result_1 = experiment_result_fixture(experiment_id: experiment.id)
+      experiment_result_2 = experiment_result_fixture(experiment_id: experiment.id)
+
+      assert Experiments.list_experiment_results(experiment.id) == [
+               experiment_result_1,
+               experiment_result_2
+             ]
+    end
 
     test "get_experiment_result!/1 returns the experiment_result with given id" do
       experiment_result = experiment_result_fixture()
