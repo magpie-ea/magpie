@@ -23,7 +23,7 @@ defmodule MagpieWeb.ExperimentSubmissionController do
     }
 
     with {:ok, %ExperimentSubmission{} = _experiment_submission} <-
-           Experiments.create_experiment_submission(params) do
+           Experiments.create_experiment_submission_and_mark_slot_as_done(params) do
       conn
       |> put_resp_content_type("text/plain")
       |> send_resp(:created, "Experiment submission succeeded.")

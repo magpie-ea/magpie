@@ -171,8 +171,12 @@ defmodule Magpie.ExperimentsTest do
 
     test "list_experiment_submissions/1 returns all experiment_submissions belonging to a particular experiment" do
       experiment = ulc_experiment_fixture()
-      experiment_submission_1 = experiment_submission_fixture(experiment_id: experiment.id)
-      experiment_submission_2 = experiment_submission_fixture(experiment_id: experiment.id)
+
+      experiment_submission_1 =
+        experiment_submission_fixture(experiment_id: experiment.id, slot_identifier: "1_1:1:1_1")
+
+      experiment_submission_2 =
+        experiment_submission_fixture(experiment_id: experiment.id, slot_identifier: "1_1:1:2_1")
 
       assert Experiments.list_experiment_submissions(experiment.id) == [
                experiment_submission_1,

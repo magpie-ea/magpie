@@ -28,6 +28,10 @@ defmodule MagpieWeb.ExperimentSubmissionControllerTest do
 
       conn = post(conn, Routes.experiment_submission_path(conn, :create), create_attrs)
 
+      experiment = Magpie.Repo.reload!(experiment)
+
+      assert "done" == Map.get(experiment.slot_statuses, "1_1:1:1_1")
+
       assert response(conn, 201)
 
       # conn = get(conn, Routes.experiment_submission_path(conn, :show, id))

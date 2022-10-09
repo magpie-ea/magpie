@@ -86,37 +86,6 @@ defmodule Magpie.Experiments.Slots do
     Experiments.update_experiment(experiment, attrs)
   end
 
-  @doc """
-  Get all slots that are free, in the order that's specificed in the :slot_ordering array.
-
-  It does seem that the most natural place to perform "expand" would be within this function. We'd just need to make sure that we lock the table during the expansion.
-  """
-
-  # def get_all_available_slots(experiment_id) when is_integer(experiment_id) do
-  #   experiment = Experiments.get_experiment!(experiment_id)
-  #   get_all_available_slots(experiment)
-  # end
-
-  # def get_all_available_slots(
-  #       %Experiment{
-  #         slot_ordering: slot_ordering,
-  #         slot_statuses: slot_statuses
-  #       } = experiment
-  #     ) do
-  #   ordered_free_slots =
-  #     Enum.filter(slot_ordering, fn slot_name ->
-  #       Map.get(slot_statuses, slot_name) == "available"
-  #     end)
-
-  #   if Enum.empty?(ordered_free_slots) do
-  #     {:ok, expanded_experiment} = expand_experiment(experiment)
-  #     {:ok, expanded_experiment_with_freed_slots} = free_slots(expanded_experiment)
-  #     get_all_available_slots(expanded_experiment_with_freed_slots)
-  #   else
-  #     ordered_free_slots
-  #   end
-  # end
-
   def set_slot_to_in_progress(experiment_id, slot_id) do
     Repo.transaction(fn ->
       %Experiment{
@@ -185,27 +154,22 @@ defmodule Magpie.Experiments.Slots do
     Enum.all?(dependencies, fn dependency -> Map.get(slot_statuses, dependency) == "done" end)
   end
 
-  # def update_slot_status(
-  #       %Experiment{
-  #         slot_ordering: _slot_ordering,
-  #         slot_statuses: orig_slot_statuses,
-  #         slot_dependencies: _slot_dependencies
-  #       } = experiment,
-  #       slot_name,
-  #       new_slot_status
-  #     ) do
-  #   new_slot_statuses = Map.put(orig_slot_statuses, slot_name, new_slot_status)
-  #   Experiments.update_experiment(experiment, slot_statuses: new_slot_statuses)
-  # end
-
-  def set_slot_as_complete(
+  # def set_slot_as_done_and_free_slots(
+  def set_slot_as_done(
         %Experiment{
+          # slot_dependencies: slot_dependencies,
           slot_statuses: slot_statuses
         } = experiment,
         slot_identifier
       ) do
-    new_slot_statuses = Map.put(slot_statuses, slot_identifier, "complete")
+    updated_slot_statuses = Map.put(slot_statuses, slot_identifier, "done")
 
-    Experiments.update_experiment(experiment, %{slot_statuses: new_slot_statuses})
+    # freed_and_updated_slot_statuses =
+    #   produce_updated_slot_statuses_via_free_slots(%{
+    #     slot_dependencies: slot_dependencies,
+    #     slot_statuses: updated_slot_statuses
+    #   })
+
+    Experiments.update_experiment(experiment, %{slot_statuses: updated_slot_statuses})
   end
 end

@@ -8,6 +8,7 @@ defmodule Magpie.Experiments do
 
   alias Magpie.Experiments.Experiment
   alias Magpie.Experiments.ExperimentSubmission
+  alias Magpie.Experiments.Slots
   alias Magpie.Experiments.SubmissionsRetrieval
 
   @doc """
@@ -104,6 +105,23 @@ defmodule Magpie.Experiments do
 
   """
   def get_experiment_submission!(id), do: Repo.get!(ExperimentSubmission, id)
+
+  def create_experiment_submission_and_mark_slot_as_done(submission_attrs) do
+    Repo.transaction(fn ->
+      with {:ok,
+            %ExperimentSubmission{experiment_id: experiment_id, slot_identifier: slot_identifier} =
+              experiment_submission} <-
+             create_experiment_submission(submission_attrs),
+           experiment <- get_experiment!(experiment_id),
+           {:ok, _updated_experiment} <-
+             Slots.set_slot_as_done(experiment, slot_identifier) do
+        experiment_submission
+      else
+        {:error, reason} -> Repo.rollback(reason)
+        _ -> Repo.rollback("submission failed")
+      end
+    end)
+  end
 
   @doc """
   Creates a experiment_submission.
