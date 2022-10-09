@@ -21,8 +21,6 @@ defmodule MagpieWeb.ParticipantChannel do
   # So this is the same as the GenServer mechanism.
   # I guess there's also no inherent reason why this function has to live in this module... It just simply makes more organizational sense to do so.
   def broadcast_next_slot_to_participant(participant_id, next_slot) do
-    IO.inspect("broadcasting #{participant_id} #{next_slot}")
-
     MagpieWeb.Endpoint.broadcast("participant:#{participant_id}", "slot_available", %{
       "slot_identifier" => next_slot
     })
@@ -78,15 +76,15 @@ defmodule MagpieWeb.ParticipantChannel do
 
   # TODO: Need to implement the heartbeat mechanism again.
 
-  def handle_in("take_free_slot", slot_id, socket) do
+  def handle_in("take_free_slot", %{"slot_identifier" => slot_identifier}, socket) do
     with {:ok, _experiment} <-
-           Slots.set_slot_to_in_progress(socket.assigns.experiment_id, slot_id),
+           Slots.set_slot_to_in_progress(socket.assigns.experiment_id, slot_identifier),
          :ok <-
            WaitingQueueWorker.dequeue_participant(
              socket.assigns.experiment_id,
              socket.assigns.participant_id
            ) do
-      socket = assign(socket, :slot_identifier, slot_id)
+      socket = assign(socket, :slot_identifier, slot_identifier)
       {:reply, :ok, socket}
     else
       error ->
