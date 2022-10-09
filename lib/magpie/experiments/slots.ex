@@ -84,7 +84,7 @@ defmodule Magpie.Experiments.Slots do
     Experiments.update_experiment(experiment, attrs)
   end
 
-  def free_slots_and_get_all_available_slots(experiment_id) when is_integer(experiment_id) do
+  def free_slots_and_get_all_available_slots(experiment_id) when is_binary(experiment_id) do
     experiment = Experiments.get_experiment!(experiment_id)
     free_slots_and_get_all_available_slots(experiment)
   end
@@ -183,21 +183,13 @@ defmodule Magpie.Experiments.Slots do
     Enum.all?(dependencies, fn dependency -> Map.get(slot_statuses, dependency) == "done" end)
   end
 
-  # def set_slot_as_done_and_free_slots(
   def set_slot_as_done(
         %Experiment{
-          # slot_dependencies: slot_dependencies,
           slot_statuses: slot_statuses
         } = experiment,
         slot_identifier
       ) do
     updated_slot_statuses = Map.put(slot_statuses, slot_identifier, "done")
-
-    # freed_and_updated_slot_statuses =
-    #   produce_updated_slot_statuses_via_free_slots(%{
-    #     slot_dependencies: slot_dependencies,
-    #     slot_statuses: updated_slot_statuses
-    #   })
 
     Experiments.update_experiment(experiment, %{slot_statuses: updated_slot_statuses})
   end

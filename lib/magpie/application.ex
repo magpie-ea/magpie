@@ -15,9 +15,10 @@ defmodule Magpie.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Magpie.PubSub},
       # Start the Endpoint (http/https)
-      MagpieWeb.Endpoint
-      # Start a worker by calling: Magpie.Worker.start_link(arg)
-      # {Magpie.Worker, arg}
+      MagpieWeb.Endpoint,
+      {MagpieWeb.ParticipantWatcher, :participants},
+      {Magpie.Experiments.WaitingQueueWorker, []},
+      {Magpie.Experiments.AssignExperimentSlotsWorker, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
