@@ -13,5 +13,6 @@ defmodule Magpie.Repo.Migrations.CreateExperimentSubmissions do
     end
 
     create index(:experiment_submissions, [:experiment_id])
+    create unique_index(:experiment_submissions, [:experiment_id, :slot_identifier])
   end
 end
