@@ -6,11 +6,6 @@ defmodule MagpieWeb.ExperimentSubmissionController do
 
   action_fallback MagpieWeb.FallbackController
 
-  # def index(conn, _params) do
-  #   experiment_submissions = Experiments.list_experiment_submissions()
-  #   render(conn, "index.json", experiment_submissions: experiment_submissions)
-  # end
-
   def create(conn, %{
         "experiment_id" => experiment_id,
         "slot_identifier" => identifier,
@@ -52,25 +47,4 @@ defmodule MagpieWeb.ExperimentSubmissionController do
         |> redirect(to: Routes.experiment_path(conn, :index))
     end
   end
-
-  # def show(conn, %{"id" => id}) do
-  #   experiment_submission = Experiments.get_experiment_submission!(id)
-  #   render(conn, "show.json", experiment_submission: experiment_submission)
-  # end
-
-  # def update(conn, %{"id" => id, "experiment_submission" => experiment_submission_params}) do
-  #   experiment_submission = Experiments.get_experiment_submission!(id)
-
-  #   with {:ok, %ExperimentSubmission{} = experiment_submission} <- Experiments.update_experiment_submission(experiment_submission, experiment_submission_params) do
-  #     render(conn, "show.json", experiment_submission: experiment_submission)
-  #   end
-  # end
-
-  # def delete(conn, %{"id" => id}) do
-  #   experiment_submission = Experiments.get_experiment_submission!(id)
-
-  #   with {:ok, %ExperimentSubmission{}} <- Experiments.delete_experiment_submission(experiment_submission) do
-  #     send_resp(conn, :no_content, "")
-  #   end
-  # end
 end
