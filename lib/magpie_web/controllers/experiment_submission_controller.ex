@@ -11,9 +11,19 @@ defmodule MagpieWeb.ExperimentSubmissionController do
   #   render(conn, "index.json", experiment_submissions: experiment_submissions)
   # end
 
-  def create(conn, %{"experiment_submission" => experiment_submission_params}) do
+  def create(conn, %{
+        "experiment_id" => experiment_id,
+        "identifier" => identifier,
+        "_json" => results
+      }) do
+    params = %{
+      "experiment_id" => experiment_id,
+      "identifier" => identifier,
+      "results" => results
+    }
+
     with {:ok, %ExperimentSubmission{} = _experiment_submission} <-
-           Experiments.create_experiment_submission(experiment_submission_params) do
+           Experiments.create_experiment_submission(params) do
       conn
       |> put_resp_content_type("text/plain")
       |> send_resp(:created, "")
@@ -28,7 +38,7 @@ defmodule MagpieWeb.ExperimentSubmissionController do
         |> redirect(to: Routes.experiment_path(conn, :index))
 
       {:ok, file_path} ->
-        download_name = "results_#{experiment_id}.csv"
+        download_name = "submissions_#{experiment_id}.csv"
 
         conn
         |> send_download({:file, file_path},

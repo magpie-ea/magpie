@@ -24,5 +24,6 @@ defmodule Magpie.Experiments.ExperimentSubmission do
     experiment_submission
     |> cast(attrs, [:results, :is_intermediate, :identifier, :experiment_id])
     |> validate_required([:results, :identifier, :experiment_id])
+    |> foreign_key_constraint(:experiment_id)
   end
 end

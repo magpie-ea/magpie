@@ -106,14 +106,17 @@ defmodule Magpie.Experiments do
   end
 
   defp get_keys_from_all_results(results) do
-    Enum.reduce(results, MapSet.new(), fn result, keys ->
-      results = result.results
+    keys =
+      Enum.reduce(results, MapSet.new(), fn result, keys ->
+        results = result.results
 
-      case results do
-        [trial | _] -> MapSet.union(MapSet.new(Map.keys(trial)), keys)
-        _ -> keys
-      end
-    end)
+        case results do
+          [trial | _] -> MapSet.union(MapSet.new(Map.keys(trial)), keys)
+          _ -> keys
+        end
+      end)
+
+    MapSet.to_list(keys)
   end
 
   # Writes the submissions to a CSV file.
