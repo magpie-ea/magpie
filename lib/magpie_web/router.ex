@@ -19,13 +19,14 @@ defmodule MagpieWeb.Router do
 
     get "/", ExperimentController, :index
     resources "/experiments", ExperimentController, except: [:edit, :update]
-    resources "/experiment_results", ExperimentResultController, only: [:create]
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", MagpieWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", MagpieWeb do
+    pipe_through :api
+    resources "/experiment_results", ExperimentResultController, only: [:create]
+    # post "/experiments/:id", ExperimentResultController, :create
+  end
 
   # Enables LiveDashboard only for development
   #
