@@ -77,13 +77,36 @@ defmodule Magpie.Experiments.Slots do
 
   @doc """
   This function is called both when the experiment is first created, and when it runs out of slots and needs to be expanded.
-
-  It will also try to free slots at the end of the action.
   """
   def initialize_or_update_slots_from_ulc_specification(%Experiment{} = experiment) do
     attrs = produce_updated_slots_from_ulc_specification(experiment)
 
     Experiments.update_experiment(experiment, attrs)
+  end
+
+  def free_slots_and_get_all_available_slots(experiment_id) when is_integer(experiment_id) do
+    experiment = Experiments.get_experiment!(experiment_id)
+    free_slots_and_get_all_available_slots(experiment)
+  end
+
+  def free_slots_and_get_all_available_slots(%Experiment{} = experiment) do
+    {:ok,
+     %Experiment{
+       slot_ordering: slot_ordering,
+       slot_statuses: slot_statuses
+     } = experiment} = free_slots(experiment)
+
+    ordered_free_slots =
+      Enum.filter(slot_ordering, fn slot_name ->
+        Map.get(slot_statuses, slot_name) == "available"
+      end)
+
+    if Enum.empty?(ordered_free_slots) do
+      {:ok, expanded_experiment} = expand_experiment(experiment)
+      free_slots_and_get_all_available_slots(expanded_experiment)
+    else
+      ordered_free_slots
+    end
   end
 
   def set_slot_to_in_progress(experiment_id, slot_id) do
@@ -112,6 +135,12 @@ defmodule Magpie.Experiments.Slots do
 
   defp expand_experiment(%Experiment{is_ulc: true} = experiment) do
     initialize_or_update_slots_from_ulc_specification(experiment)
+  end
+
+  def free_slots(%Experiment{} = experiment) do
+    freed_slots = produce_updated_slot_statuses_via_free_slots(experiment)
+
+    Experiments.update_experiment(experiment, %{slot_statuses: freed_slots})
   end
 
   @doc """
