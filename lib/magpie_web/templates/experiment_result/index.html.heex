@@ -1,0 +1,30 @@
+<h1>Listing Experiment results</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Results</th>
+      <th>Is intermediate</th>
+      <th>Identifier</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for experiment_result <- @experiment_results do %>
+    <tr>
+      <td><%= experiment_result.results %></td>
+      <td><%= experiment_result.is_intermediate %></td>
+      <td><%= experiment_result.identifier %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.experiment_result_path(@conn, :show, experiment_result) %></span>
+        <span><%= link "Edit", to: Routes.experiment_result_path(@conn, :edit, experiment_result) %></span>
+        <span><%= link "Delete", to: Routes.experiment_result_path(@conn, :delete, experiment_result), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Experiment result", to: Routes.experiment_result_path(@conn, :new) %></span>

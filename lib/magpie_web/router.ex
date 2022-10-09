@@ -19,6 +19,7 @@ defmodule MagpieWeb.Router do
 
     get "/", ExperimentController, :index
     resources "/experiments", ExperimentController, except: [:edit, :update]
+    resources "/experiment_results", ExperimentResultController, only: [:create]
   end
 
   # Other scopes may use custom stacks.

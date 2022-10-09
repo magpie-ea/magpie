@@ -161,4 +161,78 @@ defmodule Magpie.ExperimentsTest do
       assert_raise Ecto.NoResultsError, fn -> Experiments.get_experiment!(experiment.id) end
     end
   end
+
+  describe "experiment_results" do
+    alias Magpie.Experiments.ExperimentResult
+
+    import Magpie.ExperimentsFixtures
+
+    @invalid_attrs %{identifier: nil, is_intermediate: nil, results: nil, experiment_id: nil}
+
+    # test "list_experiment_results/0 returns all experiment_results" do
+    #   experiment_result = experiment_result_fixture()
+    #   assert Experiments.list_experiment_results() == [experiment_result]
+    # end
+
+    test "get_experiment_result!/1 returns the experiment_result with given id" do
+      experiment_result = experiment_result_fixture()
+      assert Experiments.get_experiment_result!(experiment_result.id) == experiment_result
+    end
+
+    test "create_experiment_result/1 with valid data creates a experiment_result" do
+      experiment = ulc_experiment_fixture()
+
+      valid_attrs = %{
+        experiment_id: experiment.id,
+        identifier: "1_1:1:1_1",
+        results: []
+      }
+
+      assert {:ok, %ExperimentResult{} = experiment_result} =
+               Experiments.create_experiment_result(valid_attrs)
+
+      assert experiment_result.identifier == "1_1:1:1_1"
+      assert experiment_result.results == []
+      assert experiment_result.experiment_id == experiment.id
+    end
+
+    test "create_experiment_result/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Experiments.create_experiment_result(@invalid_attrs)
+    end
+
+    test "update_experiment_result/2 with valid data updates the experiment_result" do
+      experiment_result = experiment_result_fixture()
+      update_attrs = %{identifier: "some updated identifier", is_intermediate: false, results: []}
+
+      assert {:ok, %ExperimentResult{} = experiment_result} =
+               Experiments.update_experiment_result(experiment_result, update_attrs)
+
+      assert experiment_result.identifier == "some updated identifier"
+      assert experiment_result.is_intermediate == false
+      assert experiment_result.results == []
+    end
+
+    test "update_experiment_result/2 with invalid data returns error changeset" do
+      experiment_result = experiment_result_fixture()
+
+      assert {:error, %Ecto.Changeset{}} =
+               Experiments.update_experiment_result(experiment_result, @invalid_attrs)
+
+      assert experiment_result == Experiments.get_experiment_result!(experiment_result.id)
+    end
+
+    test "delete_experiment_result/1 deletes the experiment_result" do
+      experiment_result = experiment_result_fixture()
+      assert {:ok, %ExperimentResult{}} = Experiments.delete_experiment_result(experiment_result)
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Experiments.get_experiment_result!(experiment_result.id)
+      end
+    end
+
+    test "change_experiment_result/1 returns a experiment_result changeset" do
+      experiment_result = experiment_result_fixture()
+      assert %Ecto.Changeset{} = Experiments.change_experiment_result(experiment_result)
+    end
+  end
 end

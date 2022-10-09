@@ -26,4 +26,22 @@ defmodule Magpie.ExperimentsFixtures do
 
     experiment
   end
+
+  @doc """
+  Generate a experiment_result.
+  """
+  def experiment_result_fixture(attrs \\ %{}) do
+    experiment = ulc_experiment_fixture()
+
+    {:ok, experiment_result} =
+      attrs
+      |> Enum.into(%{
+        experiment_id: experiment.id,
+        identifier: "1_1:1:1_1",
+        results: []
+      })
+      |> Magpie.Experiments.create_experiment_result()
+
+    experiment_result
+  end
 end
