@@ -42,7 +42,7 @@ defmodule Magpie.Experiments.SubmissionsRetrieval do
   # Note that we have a validation in schemas to ensure that each entry in `results` must have the same set of keys. So the following code take take that as an assumption.
   defp prepare_submissions_for_csv_download([_key | _] = keys, submissions) do
     # We need to prepend an additional column which contains uid in the output
-    keys = ["submission_id" | keys]
+    keys = ["submission_id" | ["slot_identifier" | keys]]
 
     # The list `outputs` contains all rows of the resulting CSV file.
     # The first row will be the keys, i.e. headers
@@ -68,7 +68,11 @@ defmodule Magpie.Experiments.SubmissionsRetrieval do
     # Essentially this is just reordering.
     Enum.map(submission.results, fn trial ->
       # Inject the column "submission_id"
-      trial = Map.put(trial, "submission_id", submission.id)
+      trial =
+        trial
+        |> Map.put("submission_id", submission.id)
+        |> Map.put("slot_identifier", submission.slot_identifier)
+
       # For each trial, use the order specified by keys
       keys
       # This is processing done when one of fields is an array. Though this type of submission should be discouraged.
