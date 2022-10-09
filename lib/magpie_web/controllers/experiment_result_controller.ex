@@ -20,6 +20,29 @@ defmodule MagpieWeb.ExperimentResultController do
     end
   end
 
+  def retrieve_as_csv(conn, %{"experiment_id" => experiment_id}) do
+    case Experiments.retrieve_experiment_results_as_csv(experiment_id) do
+      {:error, :no_submissions_yet} ->
+        conn
+        |> put_flash(:error, "No submissions for this experiment yet!")
+        |> redirect(to: Routes.experiment_path(conn, :index))
+
+      {:ok, file_path} ->
+        download_name = "results_#{experiment_id}.csv"
+
+        conn
+        |> send_download({:file, file_path},
+          content_type: "application/csv",
+          filename: download_name
+        )
+
+      _ ->
+        conn
+        |> put_flash(:error, "Unknown error")
+        |> redirect(to: Routes.experiment_path(conn, :index))
+    end
+  end
+
   # def show(conn, %{"id" => id}) do
   #   experiment_result = Experiments.get_experiment_result!(id)
   #   render(conn, "show.json", experiment_result: experiment_result)

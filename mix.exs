@@ -49,6 +49,10 @@ defmodule Magpie.MixProject do
       {:gettext, "~> 0.18"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
+      # CSV file download for experiment results
+      {:briefly, "~> 0.3"},
+      {:csv, "~> 2.5"},
+      # Lint
       {:credo, "~> 1.6", only: [:dev, :test]}
     ]
   end
