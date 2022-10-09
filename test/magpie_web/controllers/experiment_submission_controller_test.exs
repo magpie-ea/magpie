@@ -5,22 +5,6 @@ defmodule MagpieWeb.ExperimentSubmissionControllerTest do
 
   alias Magpie.Experiments.ExperimentSubmission
 
-  @update_attrs %{
-    identifier: "some updated identifier",
-    is_intermediate: false,
-    results: [
-      %{
-        "a" => 1,
-        "b" => 2
-      },
-      %{
-        "a" => 10,
-        "b" => 11
-      }
-    ]
-  }
-  @invalid_attrs %{identifier: nil, is_intermediate: nil, results: nil, experiment_id: nil}
-
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
@@ -37,15 +21,12 @@ defmodule MagpieWeb.ExperimentSubmissionControllerTest do
       experiment = ulc_experiment_fixture()
 
       create_attrs = %{
-        experiment_id: experiment.id,
-        identifier: "1_1:1:1_1",
-        results: []
+        "experiment_id" => experiment.id,
+        "slot_identifier" => "1_1:1:1_1",
+        "_json" => []
       }
 
-      conn =
-        post(conn, Routes.experiment_submission_path(conn, :create),
-          experiment_submission: create_attrs
-        )
+      conn = post(conn, Routes.experiment_submission_path(conn, :create), create_attrs)
 
       assert response(conn, 201)
 
@@ -53,17 +34,20 @@ defmodule MagpieWeb.ExperimentSubmissionControllerTest do
 
       # assert %{
       #          "id" => ^id,
-      #          "identifier" => "1_1:1:1_1",
+      #          "slot_identifier" => "1_1:1:1_1",
       #          "is_intermediate" => true,
       #          "results" => []
       #        } = json_response(conn, 200)["data"]
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      conn =
-        post(conn, Routes.experiment_submission_path(conn, :create),
-          experiment_submission: @invalid_attrs
-        )
+      invalid_attrs = %{
+        "experiment_id" => nil,
+        "slot_identifier" => nil,
+        "_json" => nil
+      }
+
+      conn = post(conn, Routes.experiment_submission_path(conn, :create), invalid_attrs)
 
       assert json_response(conn, 422)["errors"] != %{}
     end
@@ -80,7 +64,7 @@ defmodule MagpieWeb.ExperimentSubmissionControllerTest do
 
   #     assert %{
   #              "id" => ^id,
-  #              "identifier" => "some updated identifier",
+  #              "slot_identifier" => "some updated identifier",
   #              "is_intermediate" => false,
   #              "results" => []
   #            } = json_response(conn, 200)["data"]

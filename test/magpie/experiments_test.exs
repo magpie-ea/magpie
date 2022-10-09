@@ -167,7 +167,7 @@ defmodule Magpie.ExperimentsTest do
 
     import Magpie.ExperimentsFixtures
 
-    @invalid_attrs %{identifier: nil, is_intermediate: nil, results: nil, experiment_id: nil}
+    @invalid_attrs %{slot_identifier: nil, is_intermediate: nil, results: nil, experiment_id: nil}
 
     test "list_experiment_submissions/1 returns all experiment_submissions belonging to a particular experiment" do
       experiment = ulc_experiment_fixture()
@@ -192,14 +192,14 @@ defmodule Magpie.ExperimentsTest do
 
       valid_attrs = %{
         experiment_id: experiment.id,
-        identifier: "1_1:1:1_1",
+        slot_identifier: "1_1:1:1_1",
         results: []
       }
 
       assert {:ok, %ExperimentSubmission{} = experiment_submission} =
                Experiments.create_experiment_submission(valid_attrs)
 
-      assert experiment_submission.identifier == "1_1:1:1_1"
+      assert experiment_submission.slot_identifier == "1_1:1:1_1"
       assert experiment_submission.results == []
       assert experiment_submission.experiment_id == experiment.id
     end
@@ -211,12 +211,17 @@ defmodule Magpie.ExperimentsTest do
 
     test "update_experiment_submission/2 with valid data updates the experiment_submission" do
       experiment_submission = experiment_submission_fixture()
-      update_attrs = %{identifier: "some updated identifier", is_intermediate: false, results: []}
+
+      update_attrs = %{
+        slot_identifier: "some updated identifier",
+        is_intermediate: false,
+        results: []
+      }
 
       assert {:ok, %ExperimentSubmission{} = experiment_submission} =
                Experiments.update_experiment_submission(experiment_submission, update_attrs)
 
-      assert experiment_submission.identifier == "some updated identifier"
+      assert experiment_submission.slot_identifier == "some updated identifier"
       assert experiment_submission.is_intermediate == false
       assert experiment_submission.results == []
     end

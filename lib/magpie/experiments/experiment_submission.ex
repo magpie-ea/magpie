@@ -11,7 +11,7 @@ defmodule Magpie.Experiments.ExperimentSubmission do
     # Identifies a slot in this experiment.
     # Example: 1_1:1:1_1 for an ULC experiment.
     # {copy_count}_{chain}:{variant}:{generation}_{player}
-    field :identifier, :string
+    field :slot_identifier, :string
     field :is_intermediate, :boolean, default: false
     field :results, {:array, :map}
     belongs_to(:experiment, Magpie.Experiments.Experiment)
@@ -22,8 +22,8 @@ defmodule Magpie.Experiments.ExperimentSubmission do
   @doc false
   def changeset(experiment_submission, attrs) do
     experiment_submission
-    |> cast(attrs, [:results, :is_intermediate, :identifier, :experiment_id])
-    |> validate_required([:results, :identifier, :experiment_id])
+    |> cast(attrs, [:results, :is_intermediate, :slot_identifier, :experiment_id])
+    |> validate_required([:results, :slot_identifier, :experiment_id])
     |> foreign_key_constraint(:experiment_id)
   end
 end

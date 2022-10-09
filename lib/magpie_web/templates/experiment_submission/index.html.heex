@@ -15,7 +15,7 @@
     <tr>
       <td><%= experiment_submission.results %></td>
       <td><%= experiment_submission.is_intermediate %></td>
-      <td><%= experiment_submission.identifier %></td>
+      <td><%= experiment_submission.slot_identifier %></td>
 
       <td>
         <span><%= link "Show", to: Routes.experiment_submission_path(@conn, :show, experiment_submission) %></span>

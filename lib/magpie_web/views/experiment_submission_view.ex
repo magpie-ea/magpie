@@ -25,7 +25,7 @@ defmodule MagpieWeb.ExperimentSubmissionView do
       id: experiment_submission.id,
       results: experiment_submission.results,
       is_intermediate: experiment_submission.is_intermediate,
-      identifier: experiment_submission.identifier
+      slot_identifier: experiment_submission.slot_identifier
     }
   end
 end

@@ -37,7 +37,7 @@ defmodule Magpie.ExperimentsFixtures do
       attrs
       |> Enum.into(%{
         experiment_id: experiment.id,
-        identifier: "1_1:1:1_1",
+        slot_identifier: "1_1:1:1_1",
         results: [
           %{
             "a" => 1,

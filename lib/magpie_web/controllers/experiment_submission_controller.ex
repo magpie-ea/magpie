@@ -13,12 +13,12 @@ defmodule MagpieWeb.ExperimentSubmissionController do
 
   def create(conn, %{
         "experiment_id" => experiment_id,
-        "identifier" => identifier,
+        "slot_identifier" => identifier,
         "_json" => results
       }) do
     params = %{
       "experiment_id" => experiment_id,
-      "identifier" => identifier,
+      "slot_identifier" => identifier,
       "results" => results
     }
 
@@ -26,7 +26,7 @@ defmodule MagpieWeb.ExperimentSubmissionController do
            Experiments.create_experiment_submission(params) do
       conn
       |> put_resp_content_type("text/plain")
-      |> send_resp(:created, "")
+      |> send_resp(:created, "Experiment submission succeeded.")
     end
   end
 

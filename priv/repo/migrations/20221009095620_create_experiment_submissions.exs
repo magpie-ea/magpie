@@ -6,7 +6,7 @@ defmodule Magpie.Repo.Migrations.CreateExperimentSubmissions do
       add :id, :binary_id, primary_key: true
       add :results, {:array, :map}, null: false
       add :is_intermediate, :boolean, default: false
-      add :identifier, :string, null: false
+      add :slot_identifier, :string, null: false
       add :experiment_id, references(:experiments, on_delete: :delete_all, type: :binary_id)
 
       timestamps()
