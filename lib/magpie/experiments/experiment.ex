@@ -57,32 +57,31 @@ defmodule Magpie.Experiments.Experiment do
     |> initialize_slot_fields()
   end
 
-  # Not enabling updates in this version yet.
-  # def update_changeset(experiment, attrs \\ %{}) do
-  #   experiment
-  #   |> cast(attrs, [
-  #     :name,
-  #     :author,
-  #     :description,
-  #     :active,
-  #     :dynamic_retrieval_keys,
-  #     :experiment_result_columns,
-  #     :slot_ordering,
-  #     :slot_statuses,
-  #     :slot_dependencies,
-  #     :slot_attempt_counts,
-  #     :slot_trial_num_players,
-  #     :copy_count,
-  #     :expansion_strategy
-  #   ])
-  #   |> validate_required([
-  #     :name,
-  #     :author,
-  #     :active,
-  #     :is_ulc,
-  #     :expansion_strategy
-  #   ])
-  # end
+  def update_changeset(experiment, attrs \\ %{}) do
+    experiment
+    |> cast(attrs, [
+      :name,
+      :author,
+      :description,
+      :active,
+      :dynamic_retrieval_keys,
+      :experiment_result_columns,
+      :slot_ordering,
+      :slot_statuses,
+      :slot_dependencies,
+      :slot_attempt_counts,
+      :slot_trial_num_players,
+      :copy_count,
+      :expansion_strategy
+    ])
+    |> validate_required([
+      :name,
+      :author,
+      :active,
+      :is_ulc,
+      :expansion_strategy
+    ])
+  end
 
   defp validate_ulc_experiment_requirements(changeset) do
     changeset

@@ -21,4 +21,11 @@ defmodule MagpieWeb.FallbackController do
     |> put_view(MagpieWeb.ErrorView)
     |> render(:"404")
   end
+
+  def call(conn, {:error, :unprocessable_entity}) do
+    conn
+    |> put_status(:unprocessable_entity)
+    |> put_view(MagpieWeb.ErrorView)
+    |> render(:"422")
+  end
 end

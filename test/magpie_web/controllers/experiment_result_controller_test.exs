@@ -8,9 +8,18 @@ defmodule MagpieWeb.ExperimentResultControllerTest do
   @update_attrs %{
     identifier: "some updated identifier",
     is_intermediate: false,
-    results: []
+    results: [
+      %{
+        "a" => 1,
+        "b" => 2
+      },
+      %{
+        "a" => 10,
+        "b" => 11
+      }
+    ]
   }
-  @invalid_attrs %{identifier: nil, is_intermediate: nil, results: nil}
+  @invalid_attrs %{identifier: nil, is_intermediate: nil, results: nil, experiment_id: nil}
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}

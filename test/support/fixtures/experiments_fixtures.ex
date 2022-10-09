@@ -38,7 +38,16 @@ defmodule Magpie.ExperimentsFixtures do
       |> Enum.into(%{
         experiment_id: experiment.id,
         identifier: "1_1:1:1_1",
-        results: []
+        results: [
+          %{
+            "a" => 1,
+            "b" => 2
+          },
+          %{
+            "a" => 10,
+            "b" => 11
+          }
+        ]
       })
       |> Magpie.Experiments.create_experiment_result()
 

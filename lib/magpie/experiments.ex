@@ -50,10 +50,16 @@ defmodule Magpie.Experiments do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_ulc_experiment(attrs \\ %{}) do
+  def create_ulc_experiment(attrs) do
     %Experiment{}
     |> Experiment.create_changeset_ulc(attrs)
     |> Repo.insert()
+  end
+
+  def update_experiment(%Experiment{} = experiment, attrs) do
+    experiment
+    |> Experiment.update_changeset(attrs)
+    |> Repo.update()
   end
 
   @doc """
@@ -100,11 +106,31 @@ defmodule Magpie.Experiments do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_experiment_result(attrs \\ %{}) do
+  def create_experiment_result(attrs) do
     %ExperimentResult{}
     |> ExperimentResult.changeset(attrs)
     |> Repo.insert()
   end
+
+  # To be honest this feels unnecessary at this point. Let's just not do it for now.
+  # defp update_experiment_result_columns(experiment, results) do
+  #   # previously_accumulated_columns <- experiment.
+  #   with [trial | _] <- results,
+  #        keys <- Map.keys(trial),
+  #        previously_accumulated_columns <-
+  #          Map.get(experiment, :experiment_result_columns) || [],
+  #        new_experiment_result_columns <- merge_columns(keys, previously_accumulated_columns) do
+  #     update_experiment(experiment, %{experiment_result_columns: new_experiment_result_columns})
+  #   else
+  #     [] -> {:error, :unprocessable_entity}
+  #     error -> error
+  #   end
+  # end
+
+  # defp merge_columns(keys, previously_accumulated_columns) do
+  #   merged_columns = MapSet.union(MapSet.new(keys), MapSet.new(previously_accumulated_columns))
+  #   MapSet.to_list(merged_columns)
+  # end
 
   @doc """
   Updates a experiment_result.
