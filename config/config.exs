@@ -15,7 +15,8 @@ config :magpie, MagpieWeb.Endpoint,
   url: [host: "localhost"],
   render_errors: [view: MagpieWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Magpie.PubSub,
-  live_view: [signing_salt: "rlzR/yT8"]
+  live_view: [signing_salt: "rlzR/yT8"],
+  check_origin: false
 
 # Configures the mailer
 #
