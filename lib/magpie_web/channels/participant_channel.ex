@@ -97,7 +97,7 @@ defmodule MagpieWeb.ParticipantChannel do
     end
   end
 
-  def handle_in("submit_results", results, socket) do
+  def handle_in("submit_results", %{"results" => results}, socket) do
     params = %{
       "experiment_id" => socket.assigns.experiment_id,
       "slot_identifier" => socket.assigns.slot_identifier,
