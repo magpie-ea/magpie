@@ -8,3 +8,5 @@ For the frontend:
   (Note that it's also possible to submit the results via a REST endpoint `POST /api/experiment_submissions/`, but there doesn't seem to be a need for that if we standardize all experiments to use the slots mechanism via web sockets, even the ones without interactivity.)
 
 Queueing of participants according to the order in which they joined, and automatic expansion and freeing of slots are implemented.
+
+The slot identifier can be any string. For an ULC experiment, it will be in the format: `"#{copy_count}_#{chain}:#{variant}:#{generation}_#{player}"`.
