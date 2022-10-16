@@ -23,6 +23,8 @@ defmodule MagpieWeb.Router do
     get "/experiment_submissions/:experiment_id",
         ExperimentSubmissionController,
         :retrieve_as_csv
+
+    delete "/experiments/:id/reset", ExperimentController, :reset
   end
 
   # Other scopes may use custom stacks.

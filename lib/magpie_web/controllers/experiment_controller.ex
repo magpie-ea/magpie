@@ -60,6 +60,15 @@ defmodule MagpieWeb.ExperimentController do
     |> redirect(to: Routes.experiment_path(conn, :index))
   end
 
+  def reset(conn, %{"id" => id}) do
+    experiment = Experiments.get_experiment!(id)
+    {:ok, _experiment} = Experiments.reset_experiment(experiment)
+
+    conn
+    |> put_flash(:info, "Experiment reset successfully.")
+    |> redirect(to: Routes.experiment_path(conn, :index))
+  end
+
   @doc """
   Check whether the given experiment_id is valid before the participant starts the experiment on the frontend.
   """

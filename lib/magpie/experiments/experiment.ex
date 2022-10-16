@@ -3,6 +3,7 @@ defmodule Magpie.Experiments.Experiment do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Magpie.Experiments.ExperimentSubmission
   alias Magpie.Experiments.Slots
 
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -26,6 +27,8 @@ defmodule Magpie.Experiments.Experiment do
     field :ulc_num_generations, :integer
     field :ulc_num_players, :integer
     field :ulc_num_variants, :integer
+
+    has_many :experiment_submissions, ExperimentSubmission
 
     timestamps()
   end

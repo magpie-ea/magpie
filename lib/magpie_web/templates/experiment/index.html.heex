@@ -23,7 +23,8 @@
         <span><%= link "Show", to: Routes.experiment_path(@conn, :show, experiment) %></span>
         <span><%= link "Retrieve as CSV", to: Routes.experiment_submission_path(@conn, :retrieve_as_csv, experiment) %></span>
         <%!-- <span><%= link "Edit", to: Routes.experiment_path(@conn, :edit, experiment) %></span> --%>
-        <span><%= link "Delete", to: Routes.experiment_path(@conn, :delete, experiment), method: :delete, data: [confirm: "Are you sure?"] %></span>
+        <span><%= link "Delete", to: Routes.experiment_path(@conn, :delete, experiment), method: :delete, data: [confirm: "All associated experiment submissions will be deleted. Are you sure?"] %></span>
+        <span><%= link "Reset", to: Routes.experiment_path(@conn, :reset, experiment), method: :delete, data: [confirm: "All associated experiment submissions will be deleted. The slots will be reset. Are you sure?"] %></span>
       </td>
     </tr>
 <% end %>

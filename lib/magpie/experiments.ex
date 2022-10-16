@@ -4,6 +4,8 @@ defmodule Magpie.Experiments do
   """
 
   import Ecto.Query, warn: false
+
+  alias Ecto.Multi
   alias Magpie.Repo
 
   alias Magpie.Experiments.Experiment
@@ -212,5 +214,12 @@ defmodule Magpie.Experiments do
       nil -> {:error, :experiment_not_found}
       false -> {:error, :experiment_inactive}
     end
+  end
+
+  def reset_experiment(%Experiment{} = experiment) do
+    Multi.new()
+    |> Multi.delete_all(:experiment_submissions, Ecto.assoc(experiment, :experiment_submissions))
+    |> Multi.update(:reset_experiment, Experiment.create_changeset_ulc(experiment))
+    |> Repo.transaction()
   end
 end
