@@ -43,6 +43,20 @@ defmodule Magpie.Experiments do
   def get_experiment(id), do: Repo.get(Experiment, id)
 
   @doc """
+  Retrieves one particular experiment submission for the given experiment_id and slot_identifier.
+  """
+  def get_experiment_submission_for_slot(experiment_id, slot_identifier) do
+    ExperimentSubmission
+    |> Repo.get_by(%{
+      experiment_id: experiment_id,
+      slot_identifier: slot_identifier
+    })
+    |> Repo.normalize_one_result(
+      "submission for experiment #{experiment_id}, slot #{slot_identifier} not found."
+    )
+  end
+
+  @doc """
   Creates a experiment.
 
   ## Examples
