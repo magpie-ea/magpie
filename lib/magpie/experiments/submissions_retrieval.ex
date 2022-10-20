@@ -67,11 +67,14 @@ defmodule Magpie.Experiments.SubmissionsRetrieval do
   defp format_submission(submission, keys) do
     # Essentially this is just reordering.
     Enum.map(submission.results, fn trial ->
+      {copy, identifier, player} = String.split(submission.slot_identifier, "_")
       # Inject the column "submission_id"
       trial =
         trial
         |> Map.put("submission_id", submission.id)
-        |> Map.put("slot_identifier", submission.slot_identifier)
+        |> Map.put("identifier", identifier)
+        |> Map.put("copy", copy)
+        |> Map.put("player", player)
 
       # For each trial, use the order specified by keys
       keys
