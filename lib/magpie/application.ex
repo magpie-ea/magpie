@@ -14,6 +14,7 @@ defmodule Magpie.Application do
       MagpieWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: Magpie.PubSub},
+      MagpieWeb.Presence,
       # Start the Endpoint (http/https)
       MagpieWeb.Endpoint,
       {MagpieWeb.ParticipantWatcher, :participants},
