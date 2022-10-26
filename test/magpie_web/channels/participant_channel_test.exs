@@ -2,12 +2,7 @@ defmodule MagpieWeb.ParticipantChannelTest do
   use MagpieWeb.ChannelCase
 
   setup do
-    {:ok, _, socket} =
-      MagpieWeb.UserSocket
-      |> socket("user_id", %{some: :assign})
-      |> subscribe_and_join(MagpieWeb.ParticipantChannel, "participant:lobby")
-
-    %{socket: socket}
+    create_participant_and_take_slot()
   end
 
   test "ping replies with status ok", %{socket: socket} do

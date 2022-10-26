@@ -12,6 +12,7 @@ defmodule MagpieWeb.ParticipantSocket do
   # Participant Channel is responsible for holding 1-to-1 connections with each participant.
   # The ":*" part just means that any event with `participant` topic will be sent to the Participant channel.
   channel("participant:*", MagpieWeb.ParticipantChannel)
+  channel("interactive_room:*", MagpieWeb.InteractiveRoomChannel)
 
   @impl true
   def connect(%{"participant_id" => participant_id, "experiment_id" => experiment_id}, socket) do

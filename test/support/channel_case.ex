@@ -25,6 +25,29 @@ defmodule MagpieWeb.ChannelCase do
 
       # The default endpoint for testing
       @endpoint MagpieWeb.Endpoint
+
+      def create_participant_and_take_slot(
+            experiment \\ Magpie.ExperimentsFixtures.ulc_experiment_fixture(),
+            slot_identifier \\ "1_1:1:1_1"
+          ) do
+        participant_id = Ecto.UUID.generate()
+
+        # Unfortunately we can't simulate the change to assigns of take_free_slot. We can only simulate its effect by doing it directly here.
+
+        {:ok, _, socket} =
+          MagpieWeb.ParticipantSocket
+          |> socket(participant_id, %{
+            experiment_id: experiment.id,
+            participant_id: participant_id,
+            slot_identifier: slot_identifier
+          })
+          |> subscribe_and_join(
+            MagpieWeb.ParticipantChannel,
+            "participant:#{participant_id}"
+          )
+
+        %{socket: socket}
+      end
     end
   end
 
