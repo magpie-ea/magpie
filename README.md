@@ -11,3 +11,12 @@ For the frontend:
 Queueing of participants according to the order in which they joined, and automatic expansion and freeing of slots are implemented.
 
 The slot identifier can be any string. For an ULC experiment, it will be in the format: `"#{copy_count}_#{chain}:#{variant}:#{generation}_#{player}"`.
+
+## Interactive experiments
+
+- Join an interactive experiment at `"interactive_room:{experiment_id}-{slot_identifier}`, where the slot identifier should be the same as the one received from the server upon taking up a slot.
+- The experiment will start once the specified number of players for this slot has been reached.
+- As before, the following message with payload will be accepted and broadcast to all participants in the same interactive room:
+  - `"initialize_game"`
+  - `"next_round"`
+  - `"end_game"`
