@@ -4,6 +4,8 @@ For the frontend:
 - Connect to the socket with params `participant_id` and `experiment_id`, just like with the previous version.
 - If successful, it should receive a message `"waiting_in_queue"`. At this point it doesn't need to do anything.
 - The message `"slot_available"`, with the payload `{slot_identifier: slot_identifier}` indicates that the server intends to assign this particular slot to the frontend. The frontend should reply with `take_free_slot`, with the payload `{slot_identifier: slot_identifier}` to indicate that it is taking up the slot and starting the experiment.
+  - Note that the identifier received here consists of 3 parts: `{copy_count}_{identifier}_{player_count}`, e.g. `1_1:1:1_1`.
+  - The "identifier" part can be any string. For an ULC experiment, it will be in the format: `{chain}:{variant}:{generation}"`.
 - The frontend should send the message `"report_heartbeat"` periodically. If a heartbeat message has not been received in 2 minutes, the slot will be reset to "available".
 - Upon finishing the experiment, the frontend should submit the results with the message `"submit_results"` and the payload of `{results: <results as an array of objects>}`.
   (Note that it's also possible to submit the results via a REST endpoint `POST /api/experiment_submissions/`, but there doesn't seem to be a need for that if we standardize all experiments to use the slots mechanism via web sockets, even the ones without interactivity.)
@@ -11,11 +13,11 @@ For the frontend:
 
 Queueing of participants according to the order in which they joined, and automatic expansion and freeing of slots are implemented.
 
-The slot identifier can be any string. For an ULC experiment, it will be in the format: `"#{copy_count}_#{chain}:#{variant}:#{generation}_#{player}"`.
+
 
 ## Interactive experiments
 
-- Join an interactive experiment at `"interactive_room:{experiment_id}-{slot_identifier}`, where the slot identifier should be the same as the one received from the server upon taking up a slot.
+- Join an interactive experiment at `"interactive_room:{experiment_id}-{slot_identifier}`, where the slot identifier should be the middle part of the identifier string received from the server.
 - The experiment will start once the specified number of players for this slot has been reached.
 - As before, the following message with payload will be accepted and broadcast to all participants in the same interactive room:
   - `"initialize_game"`
