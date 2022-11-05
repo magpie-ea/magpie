@@ -19,7 +19,7 @@ defmodule MagpieWeb.InteractiveRoomChannel do
     experiment_id = socket.assigns.experiment_id
     [_copy, slot_identifier, _player] = String.split(socket.assigns.slot_identifier, "_")
 
-    expected_room_identifier = "#{experiment_id}-#{slot_identifier}"
+    expected_room_identifier = "#{experiment_id}:#{slot_identifier}"
 
     if room_identifier == expected_room_identifier do
       send(self(), :after_participant_join)

@@ -17,7 +17,7 @@ defmodule MagpieWeb.InteractiveRoomChannelTest do
     assert {:ok, _, _socket} =
              subscribe_and_join(
                socket,
-               "interactive_room:#{experiment_id}-#{slot_identifier}"
+               "interactive_room:#{experiment_id}:#{slot_identifier}"
              )
   end
 
@@ -30,7 +30,7 @@ defmodule MagpieWeb.InteractiveRoomChannelTest do
     assert {:ok, _, _socket} =
              subscribe_and_join(
                socket,
-               "interactive_room:#{experiment_id}-#{slot_identifier}"
+               "interactive_room:#{experiment_id}:#{slot_identifier}"
              )
 
     # Just test that it pushed out an event called "presence_diff". It seems to be not that easy to match against the payload body actually.
@@ -49,7 +49,7 @@ defmodule MagpieWeb.InteractiveRoomChannelTest do
     assert {:ok, _, _socket} =
              subscribe_and_join(
                socket,
-               "interactive_room:#{experiment_id}-#{slot_identifier}"
+               "interactive_room:#{experiment_id}:#{slot_identifier}"
              )
 
     num_participants =
@@ -68,7 +68,7 @@ defmodule MagpieWeb.InteractiveRoomChannelTest do
 
       subscribe_and_join(
         socket,
-        "interactive_room:#{experiment_id}-#{slot_identifier}"
+        "interactive_room:#{experiment_id}:#{slot_identifier}"
       )
     end)
 

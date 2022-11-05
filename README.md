@@ -17,7 +17,7 @@ Queueing of participants according to the order in which they joined, and automa
 
 ## Interactive experiments
 
-- Join an interactive experiment at `"interactive_room:{experiment_id}-{slot_identifier}`, where the slot identifier should be the middle part of the identifier string received from the server.
+- Join an interactive experiment at `"interactive_room:{experiment_id}:{slot_identifier}`, where the slot identifier should be the middle part of the identifier string received from the server.
 - The experiment will start once the specified number of players for this slot has been reached.
 - As before, the following message with payload will be accepted and broadcast to all participants in the same interactive room:
   - `"initialize_game"`
