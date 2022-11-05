@@ -48,8 +48,6 @@ defmodule Magpie.Experiments.AssignExperimentSlotsWorker do
       zipped = Enum.zip(queue, ordered_free_slots)
 
       Enum.each(zipped, fn {participant_id, free_slot} ->
-        IO.inspect("here #{participant_id} #{free_slot}")
-
         MagpieWeb.ParticipantChannel.broadcast_next_slot_to_participant(
           participant_id,
           free_slot
