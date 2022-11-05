@@ -1,4 +1,4 @@
-defmodule Magpie.Experiments.Workers.MonitorParticipantHeartbeatsWorker do
+defmodule Magpie.Experiments.MonitorParticipantHeartbeatsWorker do
   @moduledoc """
   Reopens a slot if the participant for this slot hasn't reported heartbeat for more than 2 minutes.
   """
@@ -16,7 +16,7 @@ defmodule Magpie.Experiments.Workers.MonitorParticipantHeartbeatsWorker do
   @impl true
   def init(state) do
     # Perform the action at application startup as well
-    Slots.reset_statuses_for_inactive_complex_experiments()
+    Slots.reset_status_for_inactive_slots()
     {:ok, schedule(state)}
   end
 
@@ -27,13 +27,13 @@ defmodule Magpie.Experiments.Workers.MonitorParticipantHeartbeatsWorker do
 
   @impl true
   def handle_cast(:reset_statuses, state) do
-    Slots.reset_statuses_for_inactive_complex_experiments()
+    Slots.reset_status_for_inactive_slots()
     {:noreply, schedule(state)}
   end
 
   @impl true
   def handle_info(:reset_statuses, state) do
-    Experiments.reset_statuses_for_inactive_complex_experiments()
+    Slots.reset_status_for_inactive_slots()
     {:noreply, schedule(state)}
   end
 

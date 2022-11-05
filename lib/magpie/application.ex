@@ -19,7 +19,8 @@ defmodule Magpie.Application do
       MagpieWeb.Endpoint,
       {MagpieWeb.ParticipantWatcher, :participants},
       {Magpie.Experiments.WaitingQueueWorker, []},
-      {Magpie.Experiments.AssignExperimentSlotsWorker, []}
+      {Magpie.Experiments.AssignExperimentSlotsWorker, []},
+      {Magpie.Experiments.MonitorParticipantHeartbeatsWorker, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
