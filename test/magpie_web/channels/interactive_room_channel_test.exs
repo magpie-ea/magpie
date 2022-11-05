@@ -2,8 +2,7 @@ defmodule MagpieWeb.InteractiveRoomChannelTest do
   @moduledoc false
   use MagpieWeb.ChannelCase
 
-  # alias Magpie.InteractiveRoomChannel
-  alias MagpieWeb.ParticipantSocket
+  alias Magpie.Experiments
 
   setup do
     create_participant_and_take_slot()
@@ -38,34 +37,41 @@ defmodule MagpieWeb.InteractiveRoomChannelTest do
     assert_broadcast("presence_diff", %{})
   end
 
-  # test "start_game message is sent after the specified number of participants is reached", %{
-  #   socket: socket
-  # } do
-  #   # First we need do join the first created participant to the channel
-  #   [_copy, slot_identifier, _player] = String.split(socket.assigns.slot_identifier, "_")
-  #   experiment_identifier = socket.assigns.experiment_identifier
+  test "start_game message is sent after the specified number of participants is reached" do
+    experiment = Magpie.ExperimentsFixtures.ulc_experiment_fixture(%{num_players: 4})
 
-  #   assert {:ok, _, _socket} =
-  #            subscribe_and_join(
-  #              socket,
-  #              "interactive_room:#{experiment_identifier}:#{slot_identifier}"
-  #            )
+    %{socket: socket} = create_participant_and_take_slot(experiment, "1_1:1:1_1")
 
-  #   num_participants = socket.assigns.num_players
+    # First we need do join the first created participant to the channel
+    [_copy, slot_identifier, _player] = String.split(socket.assigns.slot_identifier, "_")
+    experiment_id = socket.assigns.experiment_id
 
-  #   Enum.each(1..(num_participants - 1), fn _count ->
-  #     {:ok,
-  #      socket: socket,
-  #      experiment: _experiment,
-  #      participant_id: _participant_id,
-  #      assignment_identifier: _ai} = create_participant_and_take_slot(experiment)
+    assert {:ok, _, _socket} =
+             subscribe_and_join(
+               socket,
+               "interactive_room:#{experiment_id}-#{slot_identifier}"
+             )
 
-  #     subscribe_and_join(
-  #       socket,
-  #       "interactive_room:#{assignment_identifier.experiment_id}:#{assignment_identifier.variant}:#{assignment_identifier.chain}:#{assignment_identifier.generation}"
-  #     )
-  #   end)
+    num_participants =
+      Experiments.get_num_participants_for_slot(
+        socket.assigns.experiment_id,
+        socket.assigns.slot_identifier
+      )
 
-  #   assert_broadcast("start_game", %{"group_label" => _})
-  # end
+    experiment = Experiments.get_experiment!(experiment_id)
+
+    Enum.each(2..num_participants, fn count ->
+      %{socket: socket} = create_participant_and_take_slot(experiment, "1_1:1:1_#{count}")
+
+      [_copy, slot_identifier, _player] = String.split(socket.assigns.slot_identifier, "_")
+      experiment_id = socket.assigns.experiment_id
+
+      subscribe_and_join(
+        socket,
+        "interactive_room:#{experiment_id}-#{slot_identifier}"
+      )
+    end)
+
+    assert_broadcast("start_game", %{"group_label" => _})
+  end
 end

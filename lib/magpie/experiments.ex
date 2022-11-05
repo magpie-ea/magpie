@@ -58,6 +58,11 @@ defmodule Magpie.Experiments do
     )
   end
 
+  def get_num_participants_for_slot(experiment_id, slot_identifier) do
+    experiment = get_experiment!(experiment_id)
+    Map.get(experiment.slot_trial_num_players, slot_identifier)
+  end
+
   @doc """
   Creates a experiment.
 

@@ -8,6 +8,8 @@ defmodule MagpieWeb.InteractiveRoomChannel do
   use MagpieWeb, :channel
   alias MagpieWeb.Presence
 
+  alias Magpie.Experiments
+
   @doc """
   Let the participant join the lobby and wait in there.
 
@@ -72,10 +74,16 @@ defmodule MagpieWeb.InteractiveRoomChannel do
     # We could also send a presence_state event to the clients. Though this is the easy way to do it.
     # We need to get the number of players via slot_trial_num_players.
 
-    # if length(existing_participants) >= socket.assigns.num_players do
-    #   group_label = Base.encode64(:crypto.strong_rand_bytes(20))
-    #   broadcast!(socket, "start_game", %{"group_label" => group_label})
-    # end
+    num_participants =
+      Experiments.get_num_participants_for_slot(
+        socket.assigns.experiment_id,
+        socket.assigns.slot_identifier
+      )
+
+    if length(existing_participants) >= num_participants do
+      group_label = Base.encode64(:crypto.strong_rand_bytes(20))
+      broadcast!(socket, "start_game", %{"group_label" => group_label})
+    end
 
     {:noreply, socket}
   end
