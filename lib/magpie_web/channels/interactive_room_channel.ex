@@ -14,9 +14,12 @@ defmodule MagpieWeb.InteractiveRoomChannel do
   One lobby is created for a particular slot_identifier.
   """
   def join("interactive_room:" <> room_identifier, _payload, socket) do
-    [_copy, identifier, _player] = String.split(socket.assigns.slot_identifier, "_")
+    experiment_id = socket.assigns.experiment_id
+    [_copy, slot_identifier, _player] = String.split(socket.assigns.slot_identifier, "_")
 
-    if room_identifier == identifier do
+    expected_room_identifier = "#{experiment_id}-#{slot_identifier}"
+
+    if room_identifier == expected_room_identifier do
       send(self(), :after_participant_join)
 
       {:ok, socket}
@@ -68,6 +71,7 @@ defmodule MagpieWeb.InteractiveRoomChannel do
     # Start the experiment if the predefined number of players is reached.
     # We could also send a presence_state event to the clients. Though this is the easy way to do it.
     # We need to get the number of players via slot_trial_num_players.
+
     # if length(existing_participants) >= socket.assigns.num_players do
     #   group_label = Base.encode64(:crypto.strong_rand_bytes(20))
     #   broadcast!(socket, "start_game", %{"group_label" => group_label})

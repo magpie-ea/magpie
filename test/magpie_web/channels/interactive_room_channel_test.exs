@@ -12,24 +12,26 @@ defmodule MagpieWeb.InteractiveRoomChannelTest do
   test "joins the interactive room channel successfully", %{
     socket: socket
   } do
-    [_copy, identifier, _player] = String.split(socket.assigns.slot_identifier, "_")
+    [_copy, slot_identifier, _player] = String.split(socket.assigns.slot_identifier, "_")
+    experiment_id = socket.assigns.experiment_id
 
     assert {:ok, _, _socket} =
              subscribe_and_join(
                socket,
-               "interactive_room:#{identifier}"
+               "interactive_room:#{experiment_id}-#{slot_identifier}"
              )
   end
 
   test "the newly joined user is tracked by Presence", %{
     socket: socket
   } do
-    [_copy, identifier, _player] = String.split(socket.assigns.slot_identifier, "_")
+    [_copy, slot_identifier, _player] = String.split(socket.assigns.slot_identifier, "_")
+    experiment_id = socket.assigns.experiment_id
 
     assert {:ok, _, _socket} =
              subscribe_and_join(
                socket,
-               "interactive_room:#{identifier}"
+               "interactive_room:#{experiment_id}-#{slot_identifier}"
              )
 
     # Just test that it pushed out an event called "presence_diff". It seems to be not that easy to match against the payload body actually.
@@ -37,15 +39,17 @@ defmodule MagpieWeb.InteractiveRoomChannelTest do
   end
 
   # test "start_game message is sent after the specified number of participants is reached", %{
-  #   socket: socket,
-  #   experiment: experiment,
-  #   assignment_identifier: assignment_identifier
+  #   socket: socket
   # } do
-  #   # First we need do join the first created participant to the channel...
-  #   subscribe_and_join(
-  #     socket,
-  #     "interactive_room:#{assignment_identifier.experiment_id}:#{assignment_identifier.variant}:#{assignment_identifier.chain}:#{assignment_identifier.generation}"
-  #   )
+  #   # First we need do join the first created participant to the channel
+  #   [_copy, slot_identifier, _player] = String.split(socket.assigns.slot_identifier, "_")
+  #   experiment_identifier = socket.assigns.experiment_identifier
+
+  #   assert {:ok, _, _socket} =
+  #            subscribe_and_join(
+  #              socket,
+  #              "interactive_room:#{experiment_identifier}:#{slot_identifier}"
+  #            )
 
   #   num_participants = socket.assigns.num_players
 
