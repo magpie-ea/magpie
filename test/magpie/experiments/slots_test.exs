@@ -6,6 +6,8 @@ defmodule Magpie.Experiments.SlotsTest do
   alias Magpie.Experiments.Experiment
   alias Magpie.Experiments.Slots
 
+  alias Magpie.Repo
+
   import Magpie.ExperimentsFixtures
 
   #   describe "initialize_or_update_slots_from_ulc_specification/1" do
@@ -734,6 +736,125 @@ defmodule Magpie.Experiments.SlotsTest do
                "2_2:2:1_1",
                "2_2:2:1_2"
              ] == Slots.free_slots_and_get_all_available_slots(experiment)
+    end
+  end
+
+  describe "reset_status_for_inactive_slots" do
+    test "resets status for slots without a heartbeat within the last 2 minutes to available" do
+      starting_slot_statuses = %{
+        "1_1:1:1_1" => "in_progress",
+        "1_1:1:1_2" => "available",
+        "1_1:1:2_1" => "available",
+        "1_1:1:2_2" => "available",
+        "1_1:2:1_1" => "available",
+        "1_1:2:1_2" => "available",
+        "1_1:2:2_1" => "available",
+        "1_1:2:2_2" => "available",
+        "1_2:1:1_1" => "available",
+        "1_2:1:1_2" => "available",
+        "1_2:1:2_1" => "available",
+        "1_2:1:2_2" => "available",
+        "1_2:2:1_1" => "available",
+        "1_2:2:1_2" => "available",
+        "1_2:2:2_1" => "available",
+        "1_2:2:2_2" => "available"
+      }
+
+      expected_slot_statuses = %{
+        "1_1:1:1_1" => "available",
+        "1_1:1:1_2" => "available",
+        "1_1:1:2_1" => "available",
+        "1_1:1:2_2" => "available",
+        "1_1:2:1_1" => "available",
+        "1_1:2:1_2" => "available",
+        "1_1:2:2_1" => "available",
+        "1_1:2:2_2" => "available",
+        "1_2:1:1_1" => "available",
+        "1_2:1:1_2" => "available",
+        "1_2:1:2_1" => "available",
+        "1_2:1:2_2" => "available",
+        "1_2:2:1_1" => "available",
+        "1_2:2:1_2" => "available",
+        "1_2:2:2_1" => "available",
+        "1_2:2:2_2" => "available"
+      }
+
+      starting_slot_attempt_counts = %{
+        "1_1:1:1_1" => 1,
+        "1_1:1:1_2" => 1,
+        "1_1:1:2_1" => 1,
+        "1_1:1:2_2" => 1,
+        "1_1:2:1_1" => 1,
+        "1_1:2:1_2" => 1,
+        "1_1:2:2_1" => 1,
+        "1_1:2:2_2" => 1,
+        "1_2:1:1_1" => 1,
+        "1_2:1:1_2" => 1,
+        "1_2:1:2_1" => 1,
+        "1_2:1:2_2" => 1,
+        "1_2:2:1_1" => 1,
+        "1_2:2:1_2" => 1,
+        "1_2:2:2_1" => 1,
+        "1_2:2:2_2" => 1
+      }
+
+      expected_slot_attempt_counts = %{
+        "1_1:1:1_1" => 2,
+        "1_1:1:1_2" => 1,
+        "1_1:1:2_1" => 1,
+        "1_1:1:2_2" => 1,
+        "1_1:2:1_1" => 1,
+        "1_1:2:1_2" => 1,
+        "1_1:2:2_1" => 1,
+        "1_1:2:2_2" => 1,
+        "1_2:1:1_1" => 1,
+        "1_2:1:1_2" => 1,
+        "1_2:1:2_1" => 1,
+        "1_2:1:2_2" => 1,
+        "1_2:2:1_1" => 1,
+        "1_2:2:1_2" => 1,
+        "1_2:2:2_1" => 1,
+        "1_2:2:2_2" => 1
+      }
+
+      starting_slot_heartbeats = %{
+        "1_1:1:1_1" => 0
+      }
+
+      expected_slot_heartbeats = %{
+        "1_1:1:1_1" => nil
+      }
+
+      experiment = ulc_experiment_fixture()
+
+      Experiments.update_experiment(
+        experiment,
+        %{
+          slot_statuses: starting_slot_statuses,
+          slot_attempt_counts: starting_slot_attempt_counts,
+          slot_heartbeats: expected_slot_heartbeats
+        }
+      )
+
+      Slots.reset_status_for_inactive_slots()
+
+      experiment = Repo.reload(experiment)
+
+      assert experiment.slot_attempt_counts == expected_slot_attempt_counts
+      assert experiment.slot_statuses == expected_slot_statuses
+      assert experiment.slot_heartbeats == expected_slot_heartbeats
+    end
+  end
+
+  describe "report_heartbeat/2" do
+    test "updates the heartbeat map accordingly" do
+      experiment = ulc_experiment_fixture()
+
+      Slots.report_heartbeat(experiment.id, "1_1:1:1_1")
+
+      experiment = Repo.reload(experiment)
+
+      assert %{"1_1:1:1_1" => _} = experiment.slot_heartbeats
     end
   end
 end

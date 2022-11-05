@@ -23,6 +23,7 @@ defmodule Magpie.Experiments.Experiment do
     field :slot_ordering, {:array, :string}
     field :slot_statuses, :map
     field :slot_trial_num_players, :map
+    field :slot_heartbeats, :map, default: %{}
     field :ulc_num_chains, :integer
     field :ulc_num_generations, :integer
     field :ulc_num_players, :integer
@@ -74,6 +75,7 @@ defmodule Magpie.Experiments.Experiment do
       :slot_dependencies,
       :slot_attempt_counts,
       :slot_trial_num_players,
+      :slot_heartbeats,
       :copy_count,
       :expansion_strategy
     ])

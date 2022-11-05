@@ -74,8 +74,6 @@ defmodule MagpieWeb.ParticipantChannel do
     {:noreply, socket}
   end
 
-  # TODO: Need to implement the heartbeat mechanism again.
-
   def handle_in("take_free_slot", %{"slot_identifier" => slot_identifier}, socket) do
     with {:ok, _experiment} <-
            Slots.set_slot_to_in_progress(socket.assigns.experiment_id, slot_identifier),
@@ -95,6 +93,13 @@ defmodule MagpieWeb.ParticipantChannel do
 
         {:reply, :error, socket}
     end
+  end
+
+  # A participant needs to report their heartbeat every half a minute to keep occupying the slot.
+  def handle_in("report_heartbeat", _payload, socket) do
+    Slots.report_heartbeat(socket.assigns.experiment_id, socket.assigns.slot_identifier)
+
+    {:reply, :ok, socket}
   end
 
   def handle_in(

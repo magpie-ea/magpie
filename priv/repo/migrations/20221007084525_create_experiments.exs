@@ -21,6 +21,7 @@ defmodule Magpie.Repo.Migrations.CreateExperiments do
       add :slot_dependencies, :map, null: false
       add :slot_attempt_counts, :map, null: false
       add :slot_trial_num_players, :map, null: false
+      add :slot_heartbeats, :map
       add :expansion_strategy, :string
 
       timestamps()

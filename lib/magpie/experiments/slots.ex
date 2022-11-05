@@ -193,4 +193,58 @@ defmodule Magpie.Experiments.Slots do
 
     Experiments.update_experiment(experiment, %{slot_statuses: updated_slot_statuses})
   end
+
+  def report_heartbeat(experiment_id, slot_identifier) do
+    experiment = Experiments.get_experiment!(experiment_id)
+
+    updated_heartbeat_map =
+      Map.put(experiment.slot_heartbeats, slot_identifier, NaiveDateTime.utc_now())
+
+    changeset = Experiment.update_changeset(experiment, %{slot_heartbeats: updated_heartbeat_map})
+
+    Repo.update(changeset)
+  end
+
+  @doc """
+  Reopens a slot if the participant for this slot hasn't reported heartbeat for more than 2 minutes.
+  """
+  def reset_status_for_inactive_slots do
+    two_minutes_ago = DateTime.add(DateTime.utc_now(), -120, :second)
+
+    experiments = Repo.all(Experiment)
+
+    Enum.each(experiments, fn %Experiment{
+                                slot_attempt_counts: slot_attempt_counts,
+                                slot_ordering: slot_ordering,
+                                slot_statuses: slot_statuses,
+                                slot_heartbeats: slot_heartbeats
+                              } = experiment ->
+      ordered_slots_to_be_reset =
+        Enum.filter(slot_ordering, fn slot_name ->
+          # Use 0 as a default
+          Map.get(slot_statuses, slot_name) == "in_progress" &&
+            Map.get(slot_heartbeats, slot_name, 0) < two_minutes_ago
+        end)
+
+      {updated_slot_attempt_counts, updated_slot_heartbeats, updated_slot_statuses} =
+        Enum.reduce(
+          ordered_slots_to_be_reset,
+          {slot_attempt_counts, slot_heartbeats, slot_statuses},
+          fn slot_name, {slot_attempt_counts, slot_heartbeats, slot_statuses} ->
+            {Map.update(slot_attempt_counts, slot_name, 1, &(&1 + 1)),
+             Map.put(slot_heartbeats, slot_name, nil),
+             Map.put(slot_statuses, slot_name, "available")}
+          end
+        )
+
+      changeset =
+        Experiment.update_changeset(experiment, %{
+          slot_attempt_counts: updated_slot_attempt_counts,
+          slot_heartbeats: updated_slot_heartbeats,
+          slot_statuses: updated_slot_statuses
+        })
+
+      Repo.update(changeset)
+    end)
+  end
 end
