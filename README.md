@@ -27,3 +27,10 @@ Queueing of participants according to the order in which they joined, and automa
 ## To implement
 
 - The heartbeat mechanism is implemented and would reset the slot corresponding to the participant. The resetting of interactive experiments might still need handling though.
+
+## How to run the app locally
+- Install Elixir and Phoenix framework following the guide at http://www.phoenixframework.org/
+- Install Postgres and make sure it's running at port 5432
+- Run `mix deps.get; mix ecto.setup`
+- Run `mix phx.server` to start the server on `localhost:4000`
+- Every time a database change is introduced with new migration files, run `mix ecto.migrate` again before starting the server.
