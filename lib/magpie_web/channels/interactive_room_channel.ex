@@ -15,16 +15,20 @@ defmodule MagpieWeb.InteractiveRoomChannel do
 
   One lobby is created for a particular slot_identifier.
   """
-  def join("interactive_room:" <> room_identifier, _payload, socket) do
+  def join(
+        "interactive_room:" <> room_identifier,
+        %{"slot_identifier" => full_slot_identifier},
+        socket
+      ) do
     experiment_id = socket.assigns.experiment_id
-    [_copy, slot_identifier, _player] = String.split(socket.assigns.slot_identifier, "_")
+    [_copy, slot_identifier, _player] = String.split(full_slot_identifier, "_")
 
     expected_room_identifier = "#{experiment_id}:#{slot_identifier}"
 
     if room_identifier == expected_room_identifier do
       send(self(), :after_participant_join)
 
-      {:ok, socket}
+      {:ok, assign(socket, :slot_identifier, full_slot_identifier)}
     else
       {:error, %{reason: "invalid_format"}}
     end
