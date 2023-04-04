@@ -1,0 +1,25 @@
+---
+version: '3.9'
+services:
+  web:
+    # The path that contains Dockerfile
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    ports:
+      - 4000:4000
+    environment:
+      - MAGPIE_DB_HOST=db
+      - MIX_ENV=dev
+      - PORT=4000
+    # Ensures that the postgres service is started first.
+    depends_on:
+      - db
+  db:
+    image: postgres:14
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: magpie_dev
