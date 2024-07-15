@@ -1,3 +1,5 @@
+Note: This is a new, experimental version of the magpie backend which explores supporting fully dynamic interactive experiments. For the current stable version of magpie, please refer to the [magpie-backend](https://github.com/magpie-ea/magpie-backend) Github repo and the [project documentation site](https://magpie-experiments.org) instead.
+
 # Magpie
 
 For the frontend:
